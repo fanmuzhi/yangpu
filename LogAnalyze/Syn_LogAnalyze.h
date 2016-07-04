@@ -28,6 +28,8 @@ public:
 
 	int GetLogContent(Syn_LogAnalyzeValue * &oLogAnalyzeValue);
 
+	std::string GetLogFilePath();
+
 protected:
 
 	int GetListOfLineContent(std::string strLogFilePath, std::vector<std::string> &oListOfLineContent);
@@ -43,5 +45,7 @@ protected:
 private:
 
 	Syn_LogAnalyzeValue *_pSyn_LogAnalyzeValue;
+
+	std::string _strLogPath;
 };
 

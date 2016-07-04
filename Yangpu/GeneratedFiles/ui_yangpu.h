@@ -215,6 +215,7 @@ public:
 
         SerialNumberLineEdit = new QLineEdit(BasicInfoGroupBox);
         SerialNumberLineEdit->setObjectName(QStringLiteral("SerialNumberLineEdit"));
+        SerialNumberLineEdit->setReadOnly(true);
 
         gridLayout_2->addWidget(SerialNumberLineEdit, 0, 1, 1, 1);
 
@@ -225,6 +226,7 @@ public:
 
         SoftwareVersionLineEdit = new QLineEdit(BasicInfoGroupBox);
         SoftwareVersionLineEdit->setObjectName(QStringLiteral("SoftwareVersionLineEdit"));
+        SoftwareVersionLineEdit->setReadOnly(true);
 
         gridLayout_2->addWidget(SoftwareVersionLineEdit, 1, 1, 1, 1);
 
@@ -235,6 +237,7 @@ public:
 
         ConfigFileLineEdit = new QLineEdit(BasicInfoGroupBox);
         ConfigFileLineEdit->setObjectName(QStringLiteral("ConfigFileLineEdit"));
+        ConfigFileLineEdit->setReadOnly(true);
 
         gridLayout_2->addWidget(ConfigFileLineEdit, 2, 1, 1, 1);
 

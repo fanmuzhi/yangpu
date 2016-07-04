@@ -6,6 +6,7 @@
 
 Syn_LogAnalyze::Syn_LogAnalyze()
 :_pSyn_LogAnalyzeValue(nullptr)
+, _strLogPath("")
 {
 }
 
@@ -33,6 +34,8 @@ int Syn_LogAnalyze::LogAnalysis(std::string strLogFilePath)
 	if (Syn_LogExceptionCode::Syn_OK != rc)
 		return rc;
 
+	_strLogPath = strLogFilePath;
+
 	rc = this->AnalyzeAndFill(listOfLineContent);
 
 	return rc;
@@ -46,6 +49,11 @@ int Syn_LogAnalyze::GetLogContent(Syn_LogAnalyzeValue * &oLogAnalyzeValue)
 	oLogAnalyzeValue = _pSyn_LogAnalyzeValue;
 
 	return Syn_OK;
+}
+
+std::string Syn_LogAnalyze::GetLogFilePath()
+{
+	return _strLogPath;
 }
 
 int Syn_LogAnalyze::GetListOfLineContent(std::string strLogFilePath, std::vector<std::string> &oListOfLineContent)

@@ -100,6 +100,29 @@ void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
 	if (0 == ListCounts)
 		return;
 
+	if (0 != _ListOfLogAnalyze.size())
+	{
+		for (size_t i = 0; i < _ListOfLogAnalyze.size(); i++)
+		{
+			bool IsExists(false);
+			string sLogFilePath = _ListOfLogAnalyze[i]->GetLogFilePath();
+			for (size_t j = 0; j < listOfLogFilePath.size(); j++)
+			{
+				if (sLogFilePath == listOfLogFilePath[j])
+				{
+					IsExists = true;
+					break;
+				}
+			}
+
+			if (!IsExists)
+			{
+				listOfLogFilePath.push_back(sLogFilePath);
+			}
+		}
+	}
+
+	ListCounts = listOfLogFilePath.size();
 	this->ClearLogAnalyze();
 	this->InitWidgetState();
 	ui.tableWidget->setRowCount(ListCounts);

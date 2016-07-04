@@ -7,5 +7,6 @@ int main(int argc, char *argv[])
 	Yangpu w;
 	w.show();
 	w.showMaximized();
+	
 	return a.exec();
 }
