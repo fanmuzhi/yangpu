@@ -937,7 +937,7 @@ public:
         WOFZone1FDWithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         WOFZone1FDGainLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         WOFZone1FDDeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        WOFZone1FULabel->setText(QApplication::translate("YangpuClass", "Zone1FigerUp", 0));
+        WOFZone1FULabel->setText(QApplication::translate("YangpuClass", "Zone1 FigerUp", 0));
         WOFZone1FUNoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         WOFZone1FUWithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         WOFZone1FUGainLabel->setText(QApplication::translate("YangpuClass", "--", 0));

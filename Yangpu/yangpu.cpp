@@ -525,7 +525,7 @@ void Yangpu::SaveExcel()
 	if (0 == columnNumber || columnNumber < 6)
 		return;
 
-	QString strExcelFilePath = QFileDialog::getSaveFileName(this, "Select Result File", "./", "Excel file(*.xlsx)");
+	QString strExcelFilePath = QFileDialog::getSaveFileName(this, "Select Excel File", "", "Excel file(*.xlsx);;Excel file (*.xls)");
 	if (QString("") == strExcelFilePath)
 		return;
 
@@ -568,7 +568,7 @@ void Yangpu::SaveExcel()
 		SharpnessTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Sharpness")));
 	QAxObject *BinCodeTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "G" + QString::number(1));
 	if (NULL != BinCodeTitleCell)
-		BinCodeTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("BnCodes")));
+		BinCodeTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("BinCodes")));
 	
 	//content
 	for (unsigned i = 0; i<rowNumber; i++)
