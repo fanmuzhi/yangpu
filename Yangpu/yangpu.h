@@ -33,6 +33,8 @@ public Q_SLOTS:
 
 	void TableWidgetCellClicked(int rowNumber, int columnNumber);
 
+	void SaveExcel();
+
 protected:
 
 	void ClearLogAnalyze();

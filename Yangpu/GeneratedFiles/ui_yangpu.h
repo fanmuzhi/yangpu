@@ -821,6 +821,7 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuFile->addAction(actionOpen);
+        menuFile->addAction(actionSave);
         menuFile->addAction(actionExit);
 
         retranslateUi(YangpuClass);

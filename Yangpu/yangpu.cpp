@@ -1,5 +1,6 @@
 #include "yangpu.h"
 #include <QtWidgets>
+#include <QAxObject>
 
 #include <iostream>
 
@@ -19,6 +20,8 @@ Yangpu::Yangpu(QWidget *parent)
 	QObject::connect(ui.actionExit, SIGNAL(triggered(bool)), this, SLOT(Exit()));//Exit
 
 	QObject::connect(ui.actionOpen, SIGNAL(triggered(bool)), this, SLOT(OpenFile()));
+
+	QObject::connect(ui.actionSave, SIGNAL(triggered(bool)), this, SLOT(SaveExcel()));
 
 	QObject::connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(TableWidgetCellClicked(int, int)));
 }
@@ -202,7 +205,7 @@ void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
 			{
 				for (size_t i = 1; i < pLogResults->listOfBinCode.size(); i++)
 				{
-					strBinCodesValue = strBinCodesValue + "," + pLogResults->listOfBinCode[i];
+					strBinCodesValue = strBinCodesValue + "  " + pLogResults->listOfBinCode[i];
 				}
 			}
 
@@ -337,13 +340,24 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 	{
 		ui.ConfigFileLineEdit->setText(QString::fromStdString(pSyn_LogAnalyzeValue->ConfigFilePath));
 	}
+	if (0 != pSyn_LogAnalyzeValue->DeviceSerialNumber)
+		ui.textBrowser->append("Device SerialNumber:" + QString::number(pSyn_LogAnalyzeValue->DeviceSerialNumber) + "\n");
+	if (0 != pSyn_LogAnalyzeValue->TestDate.size())
+		ui.textBrowser->append("Test Time:" + QString::fromStdString(pSyn_LogAnalyzeValue->TestDate) + "\n");
 	for (auto iter = pSyn_LogAnalyzeValue->mapOfTagValue.begin(); iter != pSyn_LogAnalyzeValue->mapOfTagValue.end(); iter++)
 	{
 		QString qsTagName = QString::fromStdString(iter->first);
 		QString qsTagValue;
 		for (size_t i = 0; i < iter->second.size(); i++)
 		{
-			qsTagValue = qsTagValue + "," + QString::fromStdString((iter->second)[i]);
+			if (0 == i)
+			{
+				qsTagValue = QString::fromStdString((iter->second)[i]);
+			}
+			else
+			{
+				qsTagValue = qsTagValue + "," + QString::fromStdString((iter->second)[i]);
+			}
 		}
 
 		ui.textBrowser->append(qsTagName + ":" + qsTagValue+"\n");
@@ -500,4 +514,121 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 		ui.FakeFingerLabel->setPixmap(QPixmap::fromImage(image));
 		ui.FakeFingerLabel->setAlignment(Qt::AlignCenter);
 	}
+}
+
+void Yangpu::SaveExcel()
+{
+	unsigned int rowNumber = ui.tableWidget->rowCount();
+	if (0 == rowNumber)
+		return;
+	unsigned int columnNumber = ui.tableWidget->columnCount();
+	if (0 == columnNumber || columnNumber < 6)
+		return;
+
+	QString strExcelFilePath = QFileDialog::getSaveFileName(this, "Select Result File", "./", "Excel file(*.xlsx)");
+	if (QString("") == strExcelFilePath)
+		return;
+
+	QAxObject *excel = new QAxObject(this);
+	if (NULL==excel)
+		return;
+	if (!excel->setControl("Excel.Application"))
+	{
+		delete excel;
+		excel = NULL;
+		return;
+	}
+	excel->dynamicCall("SetVisible (bool Visible)", "false");
+	excel->setProperty("DisplayAlerts", false);
+
+	QAxObject *workbooks = excel->querySubObject("WorkBooks"); 
+	workbooks->dynamicCall("Add");
+	QAxObject *workbook = excel->querySubObject("ActiveWorkBook"); 
+	QAxObject *worksheets = workbook->querySubObject("Sheets");
+	QAxObject *worksheet = worksheets->querySubObject("Item(int)", 1);
+	
+	//title
+	QAxObject *SerialNuberTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "A" + QString::number(1));
+	if (NULL != SerialNuberTitleCell)
+		SerialNuberTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SensorSerialNumber")));
+	QAxObject *ResultTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "B" + QString::number(1));
+	if (NULL != ResultTitleCell)
+		ResultTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Result")));
+	QAxObject *SignalTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "C" + QString::number(1));
+	if (NULL != SignalTitleCell)
+		SignalTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Signal")));
+	QAxObject *NoiseTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "D" + QString::number(1));
+	if (NULL != NoiseTitleCell)
+		NoiseTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Noise")));
+	QAxObject *SNRTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "E" + QString::number(1));
+	if (NULL != SNRTitleCell)
+		SNRTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SNR")));
+	QAxObject *SharpnessTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "F" + QString::number(1));
+	if (NULL != SharpnessTitleCell)
+		SharpnessTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Sharpness")));
+	QAxObject *BinCodeTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "G" + QString::number(1));
+	if (NULL != BinCodeTitleCell)
+		BinCodeTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("BnCodes")));
+	
+	//content
+	for (unsigned i = 0; i<rowNumber; i++)
+	{
+		for (int j = 0; j < columnNumber; j++)
+		{
+			QString qsAlphaName("");
+			switch (j)
+			{
+				case 0:
+					qsAlphaName = "A";
+					break;
+				case 1:
+					qsAlphaName = "B";
+					break;
+				case 2:
+					qsAlphaName = "C";
+					break;
+				case 3:
+					qsAlphaName = "D";
+					break;
+				case 4:
+					qsAlphaName = "E";
+					break;
+				case 5:
+					qsAlphaName = "F";
+					break;
+				default:
+					qsAlphaName = "G";
+					break;
+			}
+			QTableWidgetItem *itemInfo = NULL;
+			itemInfo = ui.tableWidget->item(i, j);
+			if (NULL == itemInfo)
+				continue;
+			QColor qColor = itemInfo->backgroundColor();
+			QString strValue = itemInfo->text();
+
+			QAxObject *itemCell = worksheet->querySubObject("Range(QVariant, QVariant)", qsAlphaName + QString::number(i+2));
+			if (NULL != itemCell)
+			{
+				itemCell->dynamicCall("SetValue(const QVariant&)", QVariant(strValue));
+				if ("B" == qsAlphaName)
+				{
+					QAxObject * interior = itemCell->querySubObject("Interior");
+					if (NULL != interior)
+						interior->setProperty("Color", qColor);
+				}
+				//itemCell->dynamicCall("AutoFit");
+			}
+		}
+	}
+
+	QAxObject *used_range = worksheet->querySubObject("UsedRange");
+	QAxObject *columns = used_range->querySubObject("Columns");
+	columns->dynamicCall("AutoFit");
+
+	workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(strExcelFilePath));
+	workbook->dynamicCall("Close()");
+	excel->dynamicCall("Quit()");
+	delete excel;
+	excel = NULL;
 }

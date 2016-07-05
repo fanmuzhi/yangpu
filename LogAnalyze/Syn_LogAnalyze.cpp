@@ -119,6 +119,7 @@ int Syn_LogAnalyze::AnalyzeAndFill(std::vector<std::string> &ioListOfLineContent
 
 	this->InitLogAnalyzeValue();
 
+	_pSyn_LogAnalyzeValue->DeviceSerialNumber = 0;
 	for (size_t t = 0; t < listSize; t++)
 	{
 		std::vector<std::string> listOfValue;
