@@ -35,6 +35,10 @@ public Q_SLOTS:
 
 	void SaveExcel();
 
+	void SavePicSingalItem();
+
+	void SavePicAllItem();
+
 protected:
 
 	void ClearLogAnalyze();

@@ -24,6 +24,10 @@ Yangpu::Yangpu(QWidget *parent)
 	QObject::connect(ui.actionSave, SIGNAL(triggered(bool)), this, SLOT(SaveExcel()));
 
 	QObject::connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(TableWidgetCellClicked(int, int)));
+
+	QObject::connect(ui.actionSingal_Item, SIGNAL(triggered(bool)), this, SLOT(SavePicSingalItem()));
+
+	QObject::connect(ui.actionAll_Item, SIGNAL(triggered(bool)), this, SLOT(SavePicAllItem()));
 }
 
 Yangpu::~Yangpu()
@@ -307,9 +311,14 @@ void Yangpu::InitWidgetState()
 
 	//NoFinger
 	ui.NoFingerLabel->setText("--");
+	ui.NoFingerDataTableWidget->setRowCount(0);
+	ui.NoFingerDataTableWidget->setColumnCount(0);
 
 	//FakeFinger
 	ui.FakeFingerLabel->setText("--");
+	ui.FakeFingerDataTableWidget->setRowCount(0);
+	ui.FakeFingerDataTableWidget->setColumnCount(0);
+
 }
 
 void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
@@ -486,6 +495,23 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 		image = image.scaled(ColumnNumber * 2, RowNumber * 2);
 		ui.NoFingerLabel->setPixmap(QPixmap::fromImage(image));
 		ui.NoFingerLabel->setAlignment(Qt::AlignCenter);
+
+		//Fill NoFinger TableWidget
+		ui.NoFingerDataTableWidget->setRowCount(RowNumber);
+		ui.NoFingerDataTableWidget->setColumnCount(ColumnNumber);
+		for (int m = 0; m < RowNumber; m++)
+		{
+			for (int n = 0; n < ColumnNumber; n++)
+			{
+				QTableWidgetItem *itemNoFinger = new QTableWidgetItem(QString::number(pSyn_LogAnalyzeValue->NoFingerResult.arr_NoFinger[m][n]));
+				if (NULL != itemNoFinger)
+					ui.NoFingerDataTableWidget->setItem(m, n, itemNoFinger);
+			}
+		}
+		for (int i = 0; i < ColumnNumber; i++)
+		{
+			ui.NoFingerDataTableWidget->resizeColumnToContents(i);
+		}
 	}
 
 	//FakeFinger
@@ -513,6 +539,23 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 		image = image.scaled(ColumnNumber * 2, RowNumber * 2);
 		ui.FakeFingerLabel->setPixmap(QPixmap::fromImage(image));
 		ui.FakeFingerLabel->setAlignment(Qt::AlignCenter);
+
+		//Fill FakeFinger TableWidget
+		ui.FakeFingerDataTableWidget->setRowCount(RowNumber);
+		ui.FakeFingerDataTableWidget->setColumnCount(ColumnNumber);
+		for (int m = 0; m < RowNumber; m++)
+		{
+			for (int n = 0; n < ColumnNumber; n++)
+			{
+				QTableWidgetItem *itemFakeFinger = new QTableWidgetItem(QString::number(pSyn_LogAnalyzeValue->FakeFingerResult.arr_FakeFinger[m][n]));
+				if (NULL != itemFakeFinger)
+					ui.FakeFingerDataTableWidget->setItem(m, n, itemFakeFinger);
+			}
+		}
+		for (int i = 0; i < ColumnNumber; i++)
+		{
+			ui.FakeFingerDataTableWidget->resizeColumnToContents(i);
+		}
 	}
 }
 
@@ -631,4 +674,148 @@ void Yangpu::SaveExcel()
 	excel->dynamicCall("Quit()");
 	delete excel;
 	excel = NULL;
+}
+
+void Yangpu::SavePicSingalItem()
+{
+	int rowNumber = ui.tableWidget->rowCount();
+	if (0 == rowNumber)
+		return;
+
+	QString strPicturePath = QFileDialog::getExistingDirectory(this, "Select Picture Path");
+	if (strPicturePath.isNull())
+		return;
+
+	unsigned SelectRowNumber(0);
+	SelectRowNumber = ui.tableWidget->currentRow();
+
+	Syn_LogAnalyze *pSyn_LogAnalyze = _ListOfLogAnalyze[SelectRowNumber];
+	if (NULL == pSyn_LogAnalyze)
+		return;
+	Syn_LogAnalyzeValue *pSyn_LogAnalyzeValue = NULL;
+	int rc = pSyn_LogAnalyze->GetLogContent(pSyn_LogAnalyzeValue);
+	if (0 != rc || NULL == pSyn_LogAnalyzeValue)
+		return;
+
+	//NoFinger
+	if (pSyn_LogAnalyzeValue->NoFingerResult.bExcuted)
+	{
+		int RowNumber = pSyn_LogAnalyzeValue->NoFingerResult.RowNumber;
+		int ColumnNumber = pSyn_LogAnalyzeValue->NoFingerResult.ColumnNumber;
+		QVector<QRgb> vcolorTable;
+		for (int i = 0; i < 256; i++)
+			vcolorTable.append(qRgb(i, i, i));
+		QByteArray data;
+		data.resize((RowNumber)*(ColumnNumber));
+		int k(0);
+		for (int m = 0; m < RowNumber; m++)
+		{
+			for (int n = 0; n < ColumnNumber; n++)
+			{
+				data[k] = pSyn_LogAnalyzeValue->NoFingerResult.arr_NoFinger[m][n];
+				k++;
+			}
+		}
+		QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+		image.setColorTable(vcolorTable);
+		image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_NoFinger_" + QString::number(SelectRowNumber + 1) + ".bmp");
+	}
+
+	//FakeFinger
+	if (pSyn_LogAnalyzeValue->FakeFingerResult.bExcuted)
+	{
+		int RowNumber = pSyn_LogAnalyzeValue->FakeFingerResult.RowNumber;
+		int ColumnNumber = pSyn_LogAnalyzeValue->FakeFingerResult.ColumnNumber;
+		QVector<QRgb> vcolorTable;
+		for (int i = 0; i < 256; i++)
+			vcolorTable.append(qRgb(i, i, i));
+		QByteArray data;
+		data.resize((RowNumber)*(ColumnNumber));
+		int k(0);
+		for (int m = 0; m < RowNumber; m++)
+		{
+			for (int n = 0; n < ColumnNumber; n++)
+			{
+				data[k] = pSyn_LogAnalyzeValue->FakeFingerResult.arr_FakeFinger[m][n];
+				k++;
+			}
+		}
+
+		QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+		image.setColorTable(vcolorTable);
+		//QPixmap::fromImage(image);
+		image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_FakeFinger_" + QString::number(SelectRowNumber + 1) + ".bmp");
+	}
+}
+
+void Yangpu::SavePicAllItem()
+{
+	int rowNumber = ui.tableWidget->rowCount();
+	if (0 == rowNumber)
+		return;
+
+	QString strPicturePath = QFileDialog::getExistingDirectory(this, "Select Picture Path");
+	if (strPicturePath.isNull())
+		return;
+
+	for (int t = 0; t < rowNumber; t++)
+	{
+		Syn_LogAnalyze *pSyn_LogAnalyze = _ListOfLogAnalyze[t];
+		if (NULL == pSyn_LogAnalyze)
+			continue;
+		Syn_LogAnalyzeValue *pSyn_LogAnalyzeValue = NULL;
+		int rc = pSyn_LogAnalyze->GetLogContent(pSyn_LogAnalyzeValue);
+		if (0 != rc || NULL == pSyn_LogAnalyzeValue)
+			continue;
+
+		//NoFinger
+		if (pSyn_LogAnalyzeValue->NoFingerResult.bExcuted)
+		{
+			int RowNumber = pSyn_LogAnalyzeValue->NoFingerResult.RowNumber;
+			int ColumnNumber = pSyn_LogAnalyzeValue->NoFingerResult.ColumnNumber;
+			QVector<QRgb> vcolorTable;
+			for (int i = 0; i < 256; i++)
+				vcolorTable.append(qRgb(i, i, i));
+			QByteArray data;
+			data.resize((RowNumber)*(ColumnNumber));
+			int k(0);
+			for (int m = 0; m < RowNumber; m++)
+			{
+				for (int n = 0; n < ColumnNumber; n++)
+				{
+					data[k] = pSyn_LogAnalyzeValue->NoFingerResult.arr_NoFinger[m][n];
+					k++;
+				}
+			}
+			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+			image.setColorTable(vcolorTable);
+			image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_NoFinger_Item" + QString::number(t + 1) + ".bmp");
+		}
+
+		//FakeFinger
+		if (pSyn_LogAnalyzeValue->FakeFingerResult.bExcuted)
+		{
+			int RowNumber = pSyn_LogAnalyzeValue->FakeFingerResult.RowNumber;
+			int ColumnNumber = pSyn_LogAnalyzeValue->FakeFingerResult.ColumnNumber;
+			QVector<QRgb> vcolorTable;
+			for (int i = 0; i < 256; i++)
+				vcolorTable.append(qRgb(i, i, i));
+			QByteArray data;
+			data.resize((RowNumber)*(ColumnNumber));
+			int k(0);
+			for (int m = 0; m < RowNumber; m++)
+			{
+				for (int n = 0; n < ColumnNumber; n++)
+				{
+					data[k] = pSyn_LogAnalyzeValue->FakeFingerResult.arr_FakeFinger[m][n];
+					k++;
+				}
+			}
+
+			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+			image.setColorTable(vcolorTable);
+			//QPixmap::fromImage(image);
+			image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_FakeFinger_Item" + QString::number(t + 1) + ".bmp");
+		}
+	}
 }

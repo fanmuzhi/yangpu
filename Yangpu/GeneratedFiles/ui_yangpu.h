@@ -38,6 +38,8 @@ public:
     QAction *actionOpen;
     QAction *actionExit;
     QAction *actionSave;
+    QAction *actionSingal_Item;
+    QAction *actionAll_Item;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTableWidget *tableWidget;
@@ -151,8 +153,16 @@ public:
     QGroupBox *NoFingerGroupBox;
     QGridLayout *gridLayout_6;
     QLabel *NoFingerLabel;
+    QWidget *tab_2;
+    QGridLayout *gridLayout_9;
+    QTableWidget *NoFingerDataTableWidget;
+    QWidget *tab_3;
+    QGridLayout *gridLayout_10;
+    QTableWidget *FakeFingerDataTableWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
+    QMenu *menuEdit;
+    QMenu *menuSave_Pic;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -167,6 +177,10 @@ public:
         actionExit->setObjectName(QStringLiteral("actionExit"));
         actionSave = new QAction(YangpuClass);
         actionSave->setObjectName(QStringLiteral("actionSave"));
+        actionSingal_Item = new QAction(YangpuClass);
+        actionSingal_Item->setObjectName(QStringLiteral("actionSingal_Item"));
+        actionAll_Item = new QAction(YangpuClass);
+        actionAll_Item->setObjectName(QStringLiteral("actionAll_Item"));
         centralWidget = new QWidget(YangpuClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -802,6 +816,30 @@ public:
         gridLayout_5->addWidget(NoFingerGroupBox, 0, 3, 1, 2);
 
         tabWidget->addTab(tab, QString());
+        tab_2 = new QWidget();
+        tab_2->setObjectName(QStringLiteral("tab_2"));
+        gridLayout_9 = new QGridLayout(tab_2);
+        gridLayout_9->setSpacing(6);
+        gridLayout_9->setContentsMargins(11, 11, 11, 11);
+        gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        NoFingerDataTableWidget = new QTableWidget(tab_2);
+        NoFingerDataTableWidget->setObjectName(QStringLiteral("NoFingerDataTableWidget"));
+
+        gridLayout_9->addWidget(NoFingerDataTableWidget, 0, 0, 1, 1);
+
+        tabWidget->addTab(tab_2, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName(QStringLiteral("tab_3"));
+        gridLayout_10 = new QGridLayout(tab_3);
+        gridLayout_10->setSpacing(6);
+        gridLayout_10->setContentsMargins(11, 11, 11, 11);
+        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
+        FakeFingerDataTableWidget = new QTableWidget(tab_3);
+        FakeFingerDataTableWidget->setObjectName(QStringLiteral("FakeFingerDataTableWidget"));
+
+        gridLayout_10->addWidget(FakeFingerDataTableWidget, 0, 0, 1, 1);
+
+        tabWidget->addTab(tab_3, QString());
 
         gridLayout->addWidget(tabWidget, 1, 0, 1, 1);
 
@@ -811,6 +849,10 @@ public:
         menuBar->setGeometry(QRect(0, 0, 885, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
+        menuEdit = new QMenu(menuBar);
+        menuEdit->setObjectName(QStringLiteral("menuEdit"));
+        menuSave_Pic = new QMenu(menuEdit);
+        menuSave_Pic->setObjectName(QStringLiteral("menuSave_Pic"));
         YangpuClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(YangpuClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -820,9 +862,13 @@ public:
         YangpuClass->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuEdit->menuAction());
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
         menuFile->addAction(actionExit);
+        menuEdit->addAction(menuSave_Pic->menuAction());
+        menuSave_Pic->addAction(actionSingal_Item);
+        menuSave_Pic->addAction(actionAll_Item);
 
         retranslateUi(YangpuClass);
 
@@ -838,6 +884,8 @@ public:
         actionOpen->setText(QApplication::translate("YangpuClass", "Open", 0));
         actionExit->setText(QApplication::translate("YangpuClass", "Exit", 0));
         actionSave->setText(QApplication::translate("YangpuClass", "Save", 0));
+        actionSingal_Item->setText(QApplication::translate("YangpuClass", "Selected Item", 0));
+        actionAll_Item->setText(QApplication::translate("YangpuClass", "All Items", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("YangpuClass", "SerialNumber", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -945,7 +993,11 @@ public:
         NoFingerGroupBox->setTitle(QApplication::translate("YangpuClass", "Average No Finger", 0));
         NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("YangpuClass", "Detail Info", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("YangpuClass", "NoFinger Data", 0));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("YangpuClass", "FakeFinger Data", 0));
         menuFile->setTitle(QApplication::translate("YangpuClass", "File", 0));
+        menuEdit->setTitle(QApplication::translate("YangpuClass", "Edit", 0));
+        menuSave_Pic->setTitle(QApplication::translate("YangpuClass", "Save Pic", 0));
     } // retranslateUi
 
 };
