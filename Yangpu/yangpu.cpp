@@ -561,11 +561,8 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 
 void Yangpu::SaveExcel()
 {
-	unsigned int rowNumber = ui.tableWidget->rowCount();
-	if (0 == rowNumber)
-		return;
-	unsigned int columnNumber = ui.tableWidget->columnCount();
-	if (0 == columnNumber || columnNumber < 6)
+	unsigned int ListCounts = _ListOfLogAnalyze.size();
+	if (0 == ListCounts)
 		return;
 
 	QString strExcelFilePath = QFileDialog::getSaveFileName(this, "Select Excel File", "", "Excel file(*.xlsx);;Excel file (*.xls)");
@@ -589,91 +586,633 @@ void Yangpu::SaveExcel()
 	QAxObject *workbook = excel->querySubObject("ActiveWorkBook"); 
 	QAxObject *worksheets = workbook->querySubObject("Sheets");
 	QAxObject *worksheet = worksheets->querySubObject("Item(int)", 1);
-	
+
 	//title
 	QAxObject *SerialNuberTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "A" + QString::number(1));
 	if (NULL != SerialNuberTitleCell)
+	{
 		SerialNuberTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SensorSerialNumber")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('A'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('A'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
 	QAxObject *ResultTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "B" + QString::number(1));
 	if (NULL != ResultTitleCell)
+	{
 		ResultTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Result")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('B'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('B'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+		
 	QAxObject *SignalTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "C" + QString::number(1));
 	if (NULL != SignalTitleCell)
+	{
 		SignalTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Signal")));
+		
+		QString merge_cell;
+		merge_cell.append(QChar('C'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('C'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+
 	QAxObject *NoiseTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "D" + QString::number(1));
 	if (NULL != NoiseTitleCell)
+	{
 		NoiseTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Noise")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('D'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('D'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+
 	QAxObject *SNRTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "E" + QString::number(1));
 	if (NULL != SNRTitleCell)
+	{
 		SNRTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SNR")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('E'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('E'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+		
 	QAxObject *SharpnessTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "F" + QString::number(1));
 	if (NULL != SharpnessTitleCell)
+	{
 		SharpnessTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Sharpness")));
+		QString merge_cell;
+		merge_cell.append(QChar('F'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('F'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+		
 	QAxObject *BinCodeTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "G" + QString::number(1));
 	if (NULL != BinCodeTitleCell)
+	{
 		BinCodeTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("BinCodes")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('G'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('G'));
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+	
+	QAxObject *WOFZone0FDTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "H" + QString::number(1));
+	if (NULL != WOFZone0FDTitleCell)
+	{
+		WOFZone0FDTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("WOF Zone0 FingerDown")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('H'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('K'));
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "H" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "I" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "J" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "K" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+		
+	QAxObject *WOFZone0FUTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "L" + QString::number(1));
+	if (NULL != WOFZone0FUTitleCell)
+	{
+		WOFZone0FUTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("WOF Zone0 FingerUp")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('L'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('O'));
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "L" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "M" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "N" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "O" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+		
+	QAxObject *WOFZone1FDTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "P" + QString::number(1));
+	if (NULL != WOFZone1FDTitleCell)
+	{
+		WOFZone1FDTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("WOF Zone1 FingerDown")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('P'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('S'));
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "P" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Q" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "R" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "S" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+
+	QAxObject *WOFZone1FUTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "T" + QString::number(1));
+	if (NULL != WOFZone1FUTitleCell)
+	{
+		WOFZone1FUTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("WOF Zone1 FingerUp")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('T'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append(QChar('W'));
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "T" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "U" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "V" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "W" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+
+	QAxObject *SCMWOFZone0TitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "X" + QString::number(1));
+	if (NULL != SCMWOFZone0TitleCell)
+	{
+		SCMWOFZone0TitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SCM WOF Zone0/Bottom")));
+
+		QString merge_cell;
+		merge_cell.append(QChar('X'));
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AA");
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "X" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Y" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Z" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AA" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+
+	QAxObject *SCMWOFZone1TitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AB" + QString::number(1));
+	if (NULL != SCMWOFZone1TitleCell)
+	{
+		SCMWOFZone1TitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("SCM WOF Zone1/Top")));
+
+		QString merge_cell;
+		merge_cell.append("AB");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AE");
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *NoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AB" + QString::number(2));
+		if (NULL != NoFingerCell)
+			NoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("No Finger")));
+		QAxObject *WithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AC" + QString::number(2));
+		if (NULL != WithFingerCell)
+			WithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("With Finger")));
+		QAxObject *GainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AD" + QString::number(2));
+		if (NULL != GainCell)
+			GainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Gain")));
+		QAxObject *DeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AE" + QString::number(2));
+		if (NULL != DeltaCell)
+			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
+	}
+
+	/*QAxObject *NoFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(1));
+	if (NULL != NoFingerTitleCell)
+	{
+		NoFingerTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("NoFinger")));
+		QString merge_cell;
+		merge_cell.append("AF");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AF");
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}
+	QAxObject *FakeFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(1));
+	if (NULL != FakeFingerTitleCell)
+	{
+		FakeFingerTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("FakeFinger")));
+		QString merge_cell;
+		merge_cell.append("AG");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AG");
+		merge_cell.append(QString::number(2));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+	}*/
 	
 	//content
-	for (unsigned i = 0; i<rowNumber; i++)
+	for (unsigned i = 0; i<ListCounts; i++)
 	{
-		for (int j = 0; j < columnNumber; j++)
-		{
-			QString qsAlphaName("");
-			switch (j)
-			{
-				case 0:
-					qsAlphaName = "A";
-					break;
-				case 1:
-					qsAlphaName = "B";
-					break;
-				case 2:
-					qsAlphaName = "C";
-					break;
-				case 3:
-					qsAlphaName = "D";
-					break;
-				case 4:
-					qsAlphaName = "E";
-					break;
-				case 5:
-					qsAlphaName = "F";
-					break;
-				default:
-					qsAlphaName = "G";
-					break;
-			}
-			QTableWidgetItem *itemInfo = NULL;
-			itemInfo = ui.tableWidget->item(i, j);
-			if (NULL == itemInfo)
-				continue;
-			QColor qColor = itemInfo->backgroundColor();
-			QString strValue = itemInfo->text();
+		Syn_LogAnalyze *pSyn_LogAnalyze = _ListOfLogAnalyze[i];
+		if (NULL == pSyn_LogAnalyze)
+			continue;
+		Syn_LogAnalyzeValue *pSyn_LogAnalyzeValue = NULL;
+		pSyn_LogAnalyze->GetLogContent(pSyn_LogAnalyzeValue);
+		if (NULL == pSyn_LogAnalyzeValue)
+			continue;
 
-			QAxObject *itemCell = worksheet->querySubObject("Range(QVariant, QVariant)", qsAlphaName + QString::number(i+2));
-			if (NULL != itemCell)
+		//Sensor SerialNumber
+		if (0 != pSyn_LogAnalyzeValue->SensorSerialNumber.size())
+		{
+			QAxObject *itemSensorSerialNbCell = worksheet->querySubObject("Range(QVariant, QVariant)", "A" + QString::number(i + 3));
+			if (NULL != itemSensorSerialNbCell)
 			{
-				itemCell->dynamicCall("SetValue(const QVariant&)", QVariant(strValue));
-				if ("B" == qsAlphaName)
-				{
-					QAxObject * interior = itemCell->querySubObject("Interior");
-					if (NULL != interior)
-						interior->setProperty("Color", qColor);
-				}
-				//itemCell->dynamicCall("AutoFit");
+				itemSensorSerialNbCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber)));
 			}
 		}
+
+		//Result,BinCodes
+		if (0 != pSyn_LogAnalyzeValue->listOfBinCode.size())
+		{
+			//Result
+			QString qsResult("");
+			QColor qColor;
+			if (1 == pSyn_LogAnalyzeValue->listOfBinCode.size() && "1" == pSyn_LogAnalyzeValue->listOfBinCode[0])
+			{
+				qsResult = "Pass";
+				qColor = QColor(0, 255, 0);
+			}
+			else
+			{
+				qsResult = "Fail";
+				qColor = QColor(255, 0, 0);
+			}
+
+			QAxObject *itemResultCell = worksheet->querySubObject("Range(QVariant, QVariant)", "B" + QString::number(i + 3));
+			if (NULL != itemResultCell)
+			{
+				itemResultCell->dynamicCall("SetValue(const QVariant&)", QVariant(qsResult));
+				QAxObject * interior = itemResultCell->querySubObject("Interior");
+				if (NULL != interior)
+					interior->setProperty("Color", qColor);
+			}
+
+			//BinCodes
+			std::string strBinCodesValue = pSyn_LogAnalyzeValue->listOfBinCode[0];
+			if (1 != pSyn_LogAnalyzeValue->listOfBinCode.size())
+			{
+				for (size_t i = 1; i < pSyn_LogAnalyzeValue->listOfBinCode.size(); i++)
+				{
+					strBinCodesValue = strBinCodesValue + "  " + pSyn_LogAnalyzeValue->listOfBinCode[i];
+				}
+			}
+			QAxObject *itemBinCodesCell = worksheet->querySubObject("Range(QVariant, QVariant)", "G" + QString::number(i + 3));
+			if (NULL != itemBinCodesCell)
+				itemBinCodesCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::fromStdString(strBinCodesValue)));
+		}
+
+		//Signal,Noise,SNR
+		if (pSyn_LogAnalyzeValue->SNRTestResult.bExcuted)
+		{
+			QAxObject *itemSignalCell = worksheet->querySubObject("Range(QVariant, QVariant)", "C" + QString::number(i + 3));
+			if (NULL != itemSignalCell)
+				itemSignalCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->SNRTestResult.listOfSignalValue[pSyn_LogAnalyzeValue->SNRTestResult.listOfSignalValue.size() - 1])));
+			
+			QAxObject *itemNoiseCell = worksheet->querySubObject("Range(QVariant, QVariant)", "D" + QString::number(i + 3));
+			if (NULL != itemNoiseCell)
+				itemNoiseCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->SNRTestResult.listOfNoiseValue[pSyn_LogAnalyzeValue->SNRTestResult.listOfNoiseValue.size() - 1])));
+
+			QAxObject *itemSNRCell = worksheet->querySubObject("Range(QVariant, QVariant)", "E" + QString::number(i + 3));
+			if (NULL != itemSNRCell)
+				itemSNRCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->SNRTestResult.listOfSNRlValue[pSyn_LogAnalyzeValue->SNRTestResult.listOfSNRlValue.size() - 1])));
+		}
+
+		//Sharpness
+		if (pSyn_LogAnalyzeValue->SharpnessTestResult.bExcuted)
+		{
+			QAxObject *itemSharpnessCell = worksheet->querySubObject("Range(QVariant, QVariant)", "F" + QString::number(i + 3));
+			if (NULL != itemSharpnessCell)
+				itemSharpnessCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->SharpnessTestResult.OverallSharpness)));
+		}
+
+		//WOF Zone0 FingerDown
+		if (pSyn_LogAnalyzeValue->Zone0FDWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "H" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FDWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "I" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FDWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "J" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FDWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "K" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FDWOFTestResult.DeltaValue)));
+		}
+
+		//WOF Zone0 FingerUp
+		if (pSyn_LogAnalyzeValue->Zone0FUWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "L" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FUWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "M" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FUWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "N" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FUWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "O" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0FUWOFTestResult.DeltaValue)));
+		}
+
+		//WOF Zone1 FingerDown
+		if (pSyn_LogAnalyzeValue->Zone1FDWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "P" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FDWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Q" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FDWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "R" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FDWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "S" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FDWOFTestResult.DeltaValue)));
+		}
+
+		//WOF Zone1 FingerUp
+		if (pSyn_LogAnalyzeValue->Zone1FUWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "T" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FUWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "U" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FUWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "V" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FUWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "W" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1FUWOFTestResult.DeltaValue)));
+		}
+
+		//SCM WOF Zone0/Bottom
+		if (pSyn_LogAnalyzeValue->Zone0SCMWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "X" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0SCMWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Y" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0SCMWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "Z" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0SCMWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AA" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone0SCMWOFTestResult.DeltaValue)));
+		}
+
+		//SCM WOF Zone1/Top
+		if (pSyn_LogAnalyzeValue->Zone1SCMWOFTestResult.bExcuted)
+		{
+			QAxObject *itemNoFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AB" + QString::number(i + 3));
+			if (NULL != itemNoFingerCell)
+				itemNoFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1SCMWOFTestResult.NoFingerValue)));
+
+			QAxObject *itemWithFingerCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AC" + QString::number(i + 3));
+			if (NULL != itemWithFingerCell)
+				itemWithFingerCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1SCMWOFTestResult.WithFingerValue)));
+
+			QAxObject *itemGainCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AD" + QString::number(i + 3));
+			if (NULL != itemGainCell)
+				itemGainCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1SCMWOFTestResult.GainValue)));
+
+			QAxObject *itemDeltaCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AE" + QString::number(i + 3));
+			if (NULL != itemDeltaCell)
+				itemDeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->Zone1SCMWOFTestResult.DeltaValue)));
+		}
+
+		//Pic
+		/*if (pSyn_LogAnalyzeValue->NoFingerResult.bExcuted)
+		{
+			int RowNumber = pSyn_LogAnalyzeValue->NoFingerResult.RowNumber;
+			int ColumnNumber = pSyn_LogAnalyzeValue->NoFingerResult.ColumnNumber;
+			QVector<QRgb> vcolorTable;
+			for (int a = 0; a < 256; a++)
+				vcolorTable.append(qRgb(a, a, a));
+			QByteArray data;
+			data.resize((RowNumber)*(ColumnNumber));
+			int k(0);
+			for (int m = 0; m < RowNumber; m++)
+			{
+				for (int n = 0; n < ColumnNumber; n++)
+				{
+					data[k] = pSyn_LogAnalyzeValue->NoFingerResult.arr_NoFinger[m][n];
+					k++;
+				}
+			}
+			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+			image.setColorTable(vcolorTable);
+			QAxObject *itemNoFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(i + 3));
+			QAxObject *shapes = worksheet->querySubObject("Shapes");
+			if (!shapes->isNull())
+			{
+				image.save("./1.bmp");
+				shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", "./1.bmp", true, true, 14, i + 2, ColumnNumber, RowNumber);
+			}
+		}
+
+		if (pSyn_LogAnalyzeValue->FakeFingerResult.bExcuted)
+		{
+			int RowNumber = pSyn_LogAnalyzeValue->FakeFingerResult.RowNumber;
+			int ColumnNumber = pSyn_LogAnalyzeValue->FakeFingerResult.ColumnNumber;
+			QVector<QRgb> vcolorTable;
+			for (int a = 0; a < 256; a++)
+				vcolorTable.append(qRgb(a, a, a));
+			QByteArray data;
+			data.resize((RowNumber)*(ColumnNumber));
+			int k(0);
+			for (int m = 0; m < RowNumber; m++)
+			{
+				for (int n = 0; n < ColumnNumber; n++)
+				{
+					data[k] = pSyn_LogAnalyzeValue->FakeFingerResult.arr_FakeFinger[m][n];
+					k++;
+				}
+			}
+
+			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
+			image.setColorTable(vcolorTable);
+			QAxObject *itemFakeFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(i + 3));
+			if (NULL != itemFakeFingerImageCell)
+			{
+				QAxObject *shapes = itemFakeFingerImageCell->querySubObject("Shapes");
+				if (NULL!=shapes)
+				{
+					image.save("./1.bmp");
+					shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", "./1.bmp", true, true, 0, 0, ColumnNumber, RowNumber);
+				}
+			}
+		}*/
 	}
 
 	QAxObject *used_range = worksheet->querySubObject("UsedRange");
 	QAxObject *columns = used_range->querySubObject("Columns");
 	columns->dynamicCall("AutoFit");
+	QAxObject *rows = used_range->querySubObject("Rows");
+	rows->dynamicCall("AutoFit");
 
 	workbook->dynamicCall("SaveAs(const QString&)", QDir::toNativeSeparators(strExcelFilePath));
 	workbook->dynamicCall("Close()");
 	excel->dynamicCall("Quit()");
 	delete excel;
 	excel = NULL;
+
+	QMessageBox::information(this, QString("Info"), QString("Excel file has saved completed!"));
 }
 
 void Yangpu::SavePicSingalItem()
@@ -746,6 +1285,8 @@ void Yangpu::SavePicSingalItem()
 		//QPixmap::fromImage(image);
 		image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_FakeFinger_" + QString::number(SelectRowNumber + 1) + ".bmp");
 	}
+
+	QMessageBox::information(this, QString("Info"), QString("Selected item's picture(bmp) has saved completed!"));
 }
 
 void Yangpu::SavePicAllItem()
@@ -818,4 +1359,6 @@ void Yangpu::SavePicAllItem()
 			image.save(strPicturePath + "/" + QString::fromStdString(pSyn_LogAnalyzeValue->SensorSerialNumber) + "_FakeFinger_Item" + QString::number(t + 1) + ".bmp");
 		}
 	}
+
+	QMessageBox::information(this, QString("Info"), QString("All items' pictures(bmp) has saved completed!"));
 }
