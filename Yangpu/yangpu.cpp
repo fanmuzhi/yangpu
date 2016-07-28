@@ -1162,7 +1162,10 @@ void Yangpu::SaveExcel()
 			if (!shapes->isNull())
 			{
 				image.save("./1.bmp");
-				shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", "./1.bmp", true, true, 14, i + 2, ColumnNumber, RowNumber);
+				QString qsTempPath = QDir::currentPath() + "/1.bmp";
+				qsTempPath.replace("/", "\\");
+				shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", qsTempPath, true, true, 31*48, (i + 2)*15, ColumnNumber, RowNumber);
+				::remove(qsTempPath.toStdString().c_str());
 			}
 		}
 
@@ -1190,11 +1193,14 @@ void Yangpu::SaveExcel()
 			QAxObject *itemFakeFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(i + 3));
 			if (NULL != itemFakeFingerImageCell)
 			{
-				QAxObject *shapes = itemFakeFingerImageCell->querySubObject("Shapes");
-				if (NULL!=shapes)
+				QAxObject *shapes = worksheet->querySubObject("Shapes");
+				if (!shapes->isNull())
 				{
 					image.save("./1.bmp");
-					shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", "./1.bmp", true, true, 0, 0, ColumnNumber, RowNumber);
+					QString qsTempPath = QDir::currentPath() + "/1.bmp";
+					qsTempPath.replace("/", "\\");
+					shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", qsTempPath, true, true, 32*48, (i + 2)*15, ColumnNumber, RowNumber);
+					::remove(qsTempPath.toStdString().c_str());
 				}
 			}
 		}*/
