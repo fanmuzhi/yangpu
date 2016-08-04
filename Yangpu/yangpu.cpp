@@ -34,7 +34,6 @@ Yangpu::Yangpu(QWidget *parent)
 
 Yangpu::~Yangpu()
 {
-
 }
 
 void Yangpu::Exit()
@@ -222,7 +221,7 @@ void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
 	}
 
 	//Init first line selected:
-	ui.tableWidget->setCurrentCell(0, 0);
+	ui.tableWidget->setCurrentCell(0, 0, QItemSelectionModel::ClearAndSelect);
 }
 
 void Yangpu::ClearLogAnalyze()
