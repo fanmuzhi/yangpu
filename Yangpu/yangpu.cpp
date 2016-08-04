@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "windows.h"
+
 #include "Syn_LogUtils.h"
 
 Yangpu::Yangpu(QWidget *parent)
@@ -323,6 +325,13 @@ void Yangpu::InitWidgetState()
 	ui.FakeFingerDataTableWidget->setRowCount(0);
 	ui.FakeFingerDataTableWidget->setColumnCount(0);
 
+	//Contune
+	ui.DynamicRangeValueLabel->setText("--");
+	ui.ContrastValueLabel->setText("--");
+	ui.HistCenteringValueLabel->setText("--");
+	ui.ClippingHighValueLabel->setText("--");
+	ui.ClippingLowValueLabel->setText("--");
+	ui.OverallScoreValueLabel->setText("--");
 }
 
 void Yangpu::TableWidgetItemClicked()
@@ -552,8 +561,8 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 
 		QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
 		image.setColorTable(vcolorTable);
-		image = image.scaled(ColumnNumber * 2, RowNumber * 2);
-		ui.FakeFingerLabel->setPixmap(QPixmap::fromImage(image));
+		QImage image2 = image.scaled(ColumnNumber * 2, RowNumber * 2);
+		ui.FakeFingerLabel->setPixmap(QPixmap::fromImage(image2));
 		ui.FakeFingerLabel->setAlignment(Qt::AlignCenter);
 
 		//Fill FakeFinger TableWidget
@@ -571,6 +580,55 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 		for (int i = 0; i < ColumnNumber; i++)
 		{
 			ui.FakeFingerDataTableWidget->resizeColumnToContents(i);
+		}
+
+		HINSTANCE hdll;
+		typedef int(*ContuneFunc)(const unsigned int *, unsigned int, unsigned int, float *, float *, float *, float *, float *, float *);
+		ContuneFunc Contune;
+		hdll = LoadLibrary(TEXT("contune.dll"));
+		if (hdll == NULL)
+		{
+			FreeLibrary(hdll);
+		}
+		else
+		{
+			Contune = (ContuneFunc)GetProcAddress(hdll, "contune_score");
+			if (Contune == NULL)
+			{
+				FreeLibrary(hdll);
+			}
+			else
+			{
+				unsigned int *values = NULL;
+				values = (unsigned int*)malloc(sizeof(unsigned int)*MAX_VALUES);
+				if (values)
+				{
+					image.save("Contune.bmp");
+					int imageWidth = 0;
+					int imageHeight = 0;
+					contune_bmp_status status = this->contune_test_read_bmp("Contune.bmp", &imageWidth, &imageHeight,values);
+					if (CONTUNE_BMP_STATUS_OK == status)
+					{
+						float DynamicRange(0), Contrast(0), HistCentering(0), ClippingHigh(0), ClippingLow(0), OverallScore(0);
+						int scoreStatus = Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
+						if (0 == scoreStatus)
+						{
+							ui.DynamicRangeValueLabel->setText(QString::number(DynamicRange));
+							ui.ContrastValueLabel->setText(QString::number(Contrast));
+							ui.HistCenteringValueLabel->setText(QString::number(HistCentering));
+							ui.ClippingHighValueLabel->setText(QString::number(ClippingHigh));
+							ui.ClippingLowValueLabel->setText(QString::number(ClippingLow));
+							ui.OverallScoreValueLabel->setText(QString::number(OverallScore));
+						}
+					}
+
+					free(values);
+					values = NULL;
+					::remove("Contune.bmp");
+				}
+			}
+
+			FreeLibrary(hdll);
 		}
 	}
 }
@@ -914,7 +972,7 @@ void Yangpu::SaveExcel()
 			DeltaCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Delta")));
 	}
 
-	/*QAxObject *NoFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(1));
+	/*QAxObject *NoFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AK" + QString::number(1));
 	if (NULL != NoFingerTitleCell)
 	{
 		NoFingerTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("NoFinger")));
@@ -930,7 +988,7 @@ void Yangpu::SaveExcel()
 		merge_range->setProperty("WrapText", true);
 		merge_range->setProperty("MergeCells", true);
 	}
-	QAxObject *FakeFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(1));
+	QAxObject *FakeFingerTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AL" + QString::number(1));
 	if (NULL != FakeFingerTitleCell)
 	{
 		FakeFingerTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("FakeFinger")));
@@ -946,6 +1004,60 @@ void Yangpu::SaveExcel()
 		merge_range->setProperty("WrapText", true);
 		merge_range->setProperty("MergeCells", true);
 	}*/
+
+	HINSTANCE hdll;
+	typedef int(*ContuneFunc)(const unsigned int *,unsigned int,unsigned int,float *,float *,float *,float *,float *,float *);
+	ContuneFunc Contune;
+	hdll = LoadLibrary(TEXT("contune.dll"));
+	if (hdll == NULL)
+	{
+		FreeLibrary(hdll);
+	}
+	else
+	{
+		Contune = (ContuneFunc)GetProcAddress(hdll, "contune_score");
+		if (Contune == NULL)
+		{
+			FreeLibrary(hdll);
+		}
+	}
+
+	QAxObject *ContuneTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(1));
+	if (NULL != ContuneTitleCell)
+	{
+		ContuneTitleCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Contune")));
+
+		QString merge_cell;
+		merge_cell.append("AF");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AK");
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *DynamicRangeCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(2));
+		if (NULL != DynamicRangeCell)
+			DynamicRangeCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Dynamic Range")));
+		QAxObject *ContrastCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(2));
+		if (NULL != ContrastCell)
+			ContrastCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Contrast")));
+		QAxObject *HistCenteringCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AH" + QString::number(2));
+		if (NULL != HistCenteringCell)
+			HistCenteringCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Hist Centering")));
+		QAxObject *ClippingHighCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AI" + QString::number(2));
+		if (NULL != ClippingHighCell)
+			ClippingHighCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Clipping High")));
+		QAxObject *ClippingLowCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AJ" + QString::number(2));
+		if (NULL != ClippingLowCell)
+			ClippingLowCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Clipping Low")));
+		QAxObject *OverallScoreCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AK" + QString::number(2));
+		if (NULL != OverallScoreCell)
+			OverallScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Overall Score")));
+	}
 	
 	//content
 	for (unsigned i = 0; i<ListCounts; i++)
@@ -1173,7 +1285,7 @@ void Yangpu::SaveExcel()
 			}
 			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
 			image.setColorTable(vcolorTable);
-			QAxObject *itemNoFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(i + 3));
+			QAxObject *itemNoFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AL" + QString::number(i + 3));
 			QAxObject *shapes = worksheet->querySubObject("Shapes");
 			if (!shapes->isNull())
 			{
@@ -1183,7 +1295,7 @@ void Yangpu::SaveExcel()
 				shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", qsTempPath, true, true, 31*48, (i + 2)*15, ColumnNumber, RowNumber);
 				::remove(qsTempPath.toStdString().c_str());
 			}
-		}
+		}*/
 
 		if (pSyn_LogAnalyzeValue->FakeFingerResult.bExcuted)
 		{
@@ -1206,7 +1318,7 @@ void Yangpu::SaveExcel()
 
 			QImage image((const uchar*)data.constData(), ColumnNumber, RowNumber, ColumnNumber, QImage::Format_Indexed8);
 			image.setColorTable(vcolorTable);
-			QAxObject *itemFakeFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(i + 3));
+			/*QAxObject *itemFakeFingerImageCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AM" + QString::number(i + 3));
 			if (NULL != itemFakeFingerImageCell)
 			{
 				QAxObject *shapes = worksheet->querySubObject("Shapes");
@@ -1218,9 +1330,60 @@ void Yangpu::SaveExcel()
 					shapes->dynamicCall("AddPicture( QString&, bool, bool, double, double, double, double)", qsTempPath, true, true, 32*48, (i + 2)*15, ColumnNumber, RowNumber);
 					::remove(qsTempPath.toStdString().c_str());
 				}
+			}*/
+
+			if (hdll&&Contune)
+			{
+				unsigned int *values = NULL;
+				values = (unsigned int*)malloc(sizeof(unsigned int)*MAX_VALUES);
+				if (values)
+				{
+					image.save("Contune.bmp");
+					int imageWidth = 0;
+					int imageHeight = 0;
+					contune_bmp_status status = this->contune_test_read_bmp("Contune.bmp", &imageWidth, &imageHeight, values);
+					if (CONTUNE_BMP_STATUS_OK == status)
+					{
+						float DynamicRange(0), Contrast(0), HistCentering(0), ClippingHigh(0), ClippingLow(0), OverallScore(0);
+						int scoreStatus = Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
+						if (0 == scoreStatus)
+						{
+							QAxObject *itemDynamicRangeCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(i + 3));
+							if (NULL != itemDynamicRangeCell)
+								itemDynamicRangeCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(DynamicRange)));
+
+							QAxObject *itemContrastCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AG" + QString::number(i + 3));
+							if (NULL != itemContrastCell)
+								itemContrastCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(Contrast)));
+
+							QAxObject *itemHistCenteringCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AH" + QString::number(i + 3));
+							if (NULL != itemHistCenteringCell)
+								itemHistCenteringCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(HistCentering)));
+
+							QAxObject *itemClippingHighCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AI" + QString::number(i + 3));
+							if (NULL != itemClippingHighCell)
+								itemClippingHighCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(ClippingHigh)));
+
+							QAxObject *itemClippingLowCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AJ" + QString::number(i + 3));
+							if (NULL != itemClippingLowCell)
+								itemClippingLowCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(ClippingLow)));
+
+							QAxObject *itemOverallScoreCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AK" + QString::number(i + 3));
+							if (NULL != itemOverallScoreCell)
+								itemOverallScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(OverallScore)));
+						}
+					}
+
+					free(values);
+					values = NULL;
+					::remove("Contune.bmp");
+				}
 			}
-		}*/
+		}
 	}
+
+	if (hdll)
+		FreeLibrary(hdll);
 
 	QAxObject *used_range = worksheet->querySubObject("UsedRange");
 	QAxObject *columns = used_range->querySubObject("Columns");
@@ -1383,4 +1546,109 @@ void Yangpu::SavePicAllItem()
 	}
 
 	QMessageBox::information(this, QString("Info"), QString("All items' pictures(bmp) has saved completed!"));
+}
+
+contune_bmp_status Yangpu::contune_test_read_bmp(char *filepath,int *pOutWidth,int *pOutHeight,unsigned int *values)
+{
+	contune_bmp_status result = CONTUNE_BMP_STATUS_OK;
+	FILE *fp = NULL;
+	int i = 0;
+	int j = 0;
+	int datoffset = 0;
+	int size = 0;
+	int maxvalue = 0;
+	char bpp = 0;
+	int rowlen = 0;
+	int arrsize = 0;
+	unsigned char info[CONTUNE_BMP_HEADER_MINSIZE];
+	unsigned char *pixeldata = NULL;
+
+	int pad = 0;
+	int rcnt = 0;
+
+	*pOutWidth = 0;
+	*pOutHeight = 0;
+
+	if (!filepath || !pOutWidth || !pOutHeight || !values) {
+		result = CONTUNE_BMP_STATUS_INVALID_ARG;
+		goto cleanup;
+	}
+
+	fp = fopen(filepath, "rb");
+	if (!fp) {
+		result = CONTUNE_BMP_STATUS_CANT_OPEN_FILE;
+		goto cleanup;
+	}
+
+	memset(values, 0, sizeof(unsigned int)* MAX_VALUES);
+	memset(info, 0, sizeof(char)* 54);
+
+	if (fread(info, sizeof(char), CONTUNE_BMP_HEADER_MINSIZE, fp) != CONTUNE_BMP_HEADER_MINSIZE) {
+		result = CONTUNE_BMP_STATUS_CANT_READ_HEADER;
+		goto cleanup;
+	}
+
+	if (info[0] != 'B' && info[1] != 'M') {
+		result = CONTUNE_BMP_STATUS_NOT_BMP;
+		goto cleanup;
+	}
+
+	datoffset = *(int*)&info[10];
+	*pOutWidth = *(int*)&info[18];
+	*pOutHeight = *(int*)&info[22];
+	bpp = *(unsigned char*)&info[28];
+
+
+	if (*pOutWidth == 0 || *pOutHeight < 2) {
+		result = CONTUNE_BMP_STATUS_INCORRECT_DIMENSIONS;
+		goto cleanup;
+	}
+
+	if (bpp != 8) {
+		result = CONTUNE_BMP_STATUS_ONLY_SUPPORT_8_BIT;
+		goto cleanup;
+	}
+
+	size = *pOutWidth * *pOutHeight;
+	rowlen = (((bpp * *pOutWidth) + 31) / 32) * 4;
+	arrsize = rowlen * *pOutHeight;
+	maxvalue = (bpp == 16) ? 65535 : 255;
+
+	pixeldata = (unsigned char *)malloc(sizeof(unsigned char)* arrsize);
+	if (!pixeldata) {
+		result = CONTUNE_BMP_STATUS_NO_MEMORY;
+		goto cleanup;
+	}
+
+	fseek(fp, datoffset, SEEK_SET);
+	if (fread(pixeldata, sizeof(unsigned char), arrsize, fp) != arrsize) {
+		result = CONTUNE_BMP_STATUS_CANT_READ_PIXEL_VALUES;
+		goto cleanup;
+	}
+
+	pad = rowlen - *pOutWidth;
+	rcnt = rowlen;
+
+	for (i = 0, j = 0; i < arrsize; i++) {
+		rcnt--;
+		if (pad && !rcnt) {
+			//printf("\n");
+			rcnt = rowlen;
+		}
+		else if (!pad || rcnt >= pad) {
+			//printf("%c", (pixeldata[i] > 125) ? ' ' :  '.');
+			values[j++] = pixeldata[i];
+		}
+	}
+
+cleanup:
+	if (fp) {
+		fclose(fp);
+	}
+
+	if (pixeldata) {
+		free(pixeldata);
+	}
+
+	return result;
 }

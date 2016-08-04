@@ -45,7 +45,7 @@ public:
     QTableWidget *tableWidget;
     QTabWidget *tabWidget;
     QWidget *tab;
-    QGridLayout *gridLayout_5;
+    QGridLayout *gridLayout_3;
     QGroupBox *BasicInfoGroupBox;
     QGridLayout *gridLayout_2;
     QLabel *SerialNumberLabel;
@@ -93,36 +93,6 @@ public:
     QLabel *SNRZone5ValueLabel;
     QLabel *SNRZone6ValueLabel;
     QLabel *SNROverAllValueLabel;
-    QGroupBox *SharpnessGroupBox;
-    QGridLayout *gridLayout_3;
-    QLabel *SharpnesZone1Label;
-    QLabel *SharpnesZone1ValueLabel;
-    QLabel *SharpnesZone2Label;
-    QLabel *SharpnesZone2ValueLabel;
-    QLabel *SharpnesZone3Label;
-    QLabel *SharpnesZone3ValueLabel;
-    QLabel *SharpnesOverAllLabel;
-    QLabel *SharpnesOverAllValueLabel;
-    QGroupBox *SCMWOFGroupBox;
-    QGridLayout *gridLayout_8;
-    QLabel *SCMWOFLabel;
-    QLabel *SCMWOFNoFingerLabel;
-    QLabel *SCMWOFWithFingerLabel;
-    QLabel *SCMWOFGainLabel;
-    QLabel *SCMWOFDeltaLabel;
-    QLabel *SCMWOFZone0Label;
-    QLabel *SCMWOFZone1Label;
-    QLabel *SCMWOFZone0NoFingerLabel;
-    QLabel *SCMWOFZone0WithFingerLabel;
-    QLabel *SCMWOFZone0GainLabel;
-    QLabel *SCMWOFZone0DeltaLabel;
-    QLabel *SCMWOFZone1NoFingerLabel;
-    QLabel *SCMWOFZone1WithFingerLabel;
-    QLabel *SCMWOFZone1GainLabel;
-    QLabel *SCMWOFZone1DeltaLabel;
-    QGroupBox *FakeFingerGroupBox;
-    QGridLayout *gridLayout_7;
-    QLabel *FakeFingerLabel;
     QGroupBox *WOFGroupBox;
     QGridLayout *gridLayout_4;
     QLabel *WOFTagLabel;
@@ -153,6 +123,53 @@ public:
     QGroupBox *NoFingerGroupBox;
     QGridLayout *gridLayout_6;
     QLabel *NoFingerLabel;
+    QHBoxLayout *horizontalLayout_2;
+    QGroupBox *ContuneroupBox;
+    QHBoxLayout *horizontalLayout_3;
+    QVBoxLayout *verticalLayout_6;
+    QLabel *DynamicRangeLabel;
+    QLabel *ContrastLabel;
+    QLabel *HistCenteringLabel;
+    QLabel *ClippingHighLabel;
+    QLabel *ClippingLowLabel;
+    QLabel *OverallScoreLabel;
+    QVBoxLayout *verticalLayout_5;
+    QLabel *DynamicRangeValueLabel;
+    QLabel *ContrastValueLabel;
+    QLabel *HistCenteringValueLabel;
+    QLabel *ClippingHighValueLabel;
+    QLabel *ClippingLowValueLabel;
+    QLabel *OverallScoreValueLabel;
+    QGroupBox *SharpnessGroupBox;
+    QGridLayout *gridLayout_5;
+    QLabel *SharpnesZone1Label;
+    QLabel *SharpnesZone1ValueLabel;
+    QLabel *SharpnesZone2Label;
+    QLabel *SharpnesZone2ValueLabel;
+    QLabel *SharpnesZone3Label;
+    QLabel *SharpnesZone3ValueLabel;
+    QLabel *SharpnesOverAllLabel;
+    QLabel *SharpnesOverAllValueLabel;
+    QGroupBox *SCMWOFGroupBox;
+    QGridLayout *gridLayout_8;
+    QLabel *SCMWOFLabel;
+    QLabel *SCMWOFNoFingerLabel;
+    QLabel *SCMWOFWithFingerLabel;
+    QLabel *SCMWOFGainLabel;
+    QLabel *SCMWOFDeltaLabel;
+    QLabel *SCMWOFZone0Label;
+    QLabel *SCMWOFZone1Label;
+    QLabel *SCMWOFZone0NoFingerLabel;
+    QLabel *SCMWOFZone0WithFingerLabel;
+    QLabel *SCMWOFZone0GainLabel;
+    QLabel *SCMWOFZone0DeltaLabel;
+    QLabel *SCMWOFZone1NoFingerLabel;
+    QLabel *SCMWOFZone1WithFingerLabel;
+    QLabel *SCMWOFZone1GainLabel;
+    QLabel *SCMWOFZone1DeltaLabel;
+    QGroupBox *FakeFingerGroupBox;
+    QGridLayout *gridLayout_7;
+    QLabel *FakeFingerLabel;
     QWidget *tab_2;
     QGridLayout *gridLayout_9;
     QTableWidget *NoFingerDataTableWidget;
@@ -170,7 +187,7 @@ public:
     {
         if (YangpuClass->objectName().isEmpty())
             YangpuClass->setObjectName(QStringLiteral("YangpuClass"));
-        YangpuClass->resize(885, 854);
+        YangpuClass->resize(985, 854);
         actionOpen = new QAction(YangpuClass);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
         actionExit = new QAction(YangpuClass);
@@ -212,10 +229,10 @@ public:
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
-        gridLayout_5 = new QGridLayout(tab);
-        gridLayout_5->setSpacing(6);
-        gridLayout_5->setContentsMargins(11, 11, 11, 11);
-        gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
+        gridLayout_3 = new QGridLayout(tab);
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setContentsMargins(11, 11, 11, 11);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
         BasicInfoGroupBox = new QGroupBox(tab);
         BasicInfoGroupBox->setObjectName(QStringLiteral("BasicInfoGroupBox"));
         gridLayout_2 = new QGridLayout(BasicInfoGroupBox);
@@ -261,7 +278,7 @@ public:
         gridLayout_2->addWidget(textBrowser, 3, 0, 1, 2);
 
 
-        gridLayout_5->addWidget(BasicInfoGroupBox, 0, 0, 2, 1);
+        gridLayout_3->addWidget(BasicInfoGroupBox, 0, 0, 2, 1);
 
         SignalGroupBox = new QGroupBox(tab);
         SignalGroupBox->setObjectName(QStringLiteral("SignalGroupBox"));
@@ -480,171 +497,7 @@ public:
         horizontalLayout->addLayout(verticalLayout_2);
 
 
-        gridLayout_5->addWidget(SignalGroupBox, 0, 1, 1, 1);
-
-        SharpnessGroupBox = new QGroupBox(tab);
-        SharpnessGroupBox->setObjectName(QStringLiteral("SharpnessGroupBox"));
-        gridLayout_3 = new QGridLayout(SharpnessGroupBox);
-        gridLayout_3->setSpacing(6);
-        gridLayout_3->setContentsMargins(11, 11, 11, 11);
-        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        SharpnesZone1Label = new QLabel(SharpnessGroupBox);
-        SharpnesZone1Label->setObjectName(QStringLiteral("SharpnesZone1Label"));
-
-        gridLayout_3->addWidget(SharpnesZone1Label, 0, 0, 1, 1);
-
-        SharpnesZone1ValueLabel = new QLabel(SharpnessGroupBox);
-        SharpnesZone1ValueLabel->setObjectName(QStringLiteral("SharpnesZone1ValueLabel"));
-        SharpnesZone1ValueLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(SharpnesZone1ValueLabel, 0, 1, 1, 1);
-
-        SharpnesZone2Label = new QLabel(SharpnessGroupBox);
-        SharpnesZone2Label->setObjectName(QStringLiteral("SharpnesZone2Label"));
-
-        gridLayout_3->addWidget(SharpnesZone2Label, 1, 0, 1, 1);
-
-        SharpnesZone2ValueLabel = new QLabel(SharpnessGroupBox);
-        SharpnesZone2ValueLabel->setObjectName(QStringLiteral("SharpnesZone2ValueLabel"));
-        SharpnesZone2ValueLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(SharpnesZone2ValueLabel, 1, 1, 1, 1);
-
-        SharpnesZone3Label = new QLabel(SharpnessGroupBox);
-        SharpnesZone3Label->setObjectName(QStringLiteral("SharpnesZone3Label"));
-
-        gridLayout_3->addWidget(SharpnesZone3Label, 2, 0, 1, 1);
-
-        SharpnesZone3ValueLabel = new QLabel(SharpnessGroupBox);
-        SharpnesZone3ValueLabel->setObjectName(QStringLiteral("SharpnesZone3ValueLabel"));
-        SharpnesZone3ValueLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(SharpnesZone3ValueLabel, 2, 1, 1, 1);
-
-        SharpnesOverAllLabel = new QLabel(SharpnessGroupBox);
-        SharpnesOverAllLabel->setObjectName(QStringLiteral("SharpnesOverAllLabel"));
-
-        gridLayout_3->addWidget(SharpnesOverAllLabel, 3, 0, 1, 1);
-
-        SharpnesOverAllValueLabel = new QLabel(SharpnessGroupBox);
-        SharpnesOverAllValueLabel->setObjectName(QStringLiteral("SharpnesOverAllValueLabel"));
-        SharpnesOverAllValueLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(SharpnesOverAllValueLabel, 3, 1, 1, 1);
-
-
-        gridLayout_5->addWidget(SharpnessGroupBox, 1, 1, 1, 1);
-
-        SCMWOFGroupBox = new QGroupBox(tab);
-        SCMWOFGroupBox->setObjectName(QStringLiteral("SCMWOFGroupBox"));
-        gridLayout_8 = new QGridLayout(SCMWOFGroupBox);
-        gridLayout_8->setSpacing(6);
-        gridLayout_8->setContentsMargins(11, 11, 11, 11);
-        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
-        SCMWOFLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFLabel->setObjectName(QStringLiteral("SCMWOFLabel"));
-
-        gridLayout_8->addWidget(SCMWOFLabel, 0, 0, 1, 1);
-
-        SCMWOFNoFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFNoFingerLabel->setObjectName(QStringLiteral("SCMWOFNoFingerLabel"));
-        SCMWOFNoFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFNoFingerLabel, 0, 1, 1, 1);
-
-        SCMWOFWithFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFWithFingerLabel->setObjectName(QStringLiteral("SCMWOFWithFingerLabel"));
-        SCMWOFWithFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFWithFingerLabel, 0, 2, 1, 1);
-
-        SCMWOFGainLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFGainLabel->setObjectName(QStringLiteral("SCMWOFGainLabel"));
-        SCMWOFGainLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFGainLabel, 0, 3, 1, 1);
-
-        SCMWOFDeltaLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFDeltaLabel->setObjectName(QStringLiteral("SCMWOFDeltaLabel"));
-        SCMWOFDeltaLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFDeltaLabel, 0, 4, 1, 1);
-
-        SCMWOFZone0Label = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone0Label->setObjectName(QStringLiteral("SCMWOFZone0Label"));
-
-        gridLayout_8->addWidget(SCMWOFZone0Label, 1, 0, 1, 1);
-
-        SCMWOFZone1Label = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone1Label->setObjectName(QStringLiteral("SCMWOFZone1Label"));
-
-        gridLayout_8->addWidget(SCMWOFZone1Label, 2, 0, 1, 1);
-
-        SCMWOFZone0NoFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone0NoFingerLabel->setObjectName(QStringLiteral("SCMWOFZone0NoFingerLabel"));
-        SCMWOFZone0NoFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone0NoFingerLabel, 1, 1, 1, 1);
-
-        SCMWOFZone0WithFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone0WithFingerLabel->setObjectName(QStringLiteral("SCMWOFZone0WithFingerLabel"));
-        SCMWOFZone0WithFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone0WithFingerLabel, 1, 2, 1, 1);
-
-        SCMWOFZone0GainLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone0GainLabel->setObjectName(QStringLiteral("SCMWOFZone0GainLabel"));
-        SCMWOFZone0GainLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone0GainLabel, 1, 3, 1, 1);
-
-        SCMWOFZone0DeltaLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone0DeltaLabel->setObjectName(QStringLiteral("SCMWOFZone0DeltaLabel"));
-        SCMWOFZone0DeltaLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone0DeltaLabel, 1, 4, 1, 1);
-
-        SCMWOFZone1NoFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone1NoFingerLabel->setObjectName(QStringLiteral("SCMWOFZone1NoFingerLabel"));
-        SCMWOFZone1NoFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone1NoFingerLabel, 2, 1, 1, 1);
-
-        SCMWOFZone1WithFingerLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone1WithFingerLabel->setObjectName(QStringLiteral("SCMWOFZone1WithFingerLabel"));
-        SCMWOFZone1WithFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone1WithFingerLabel, 2, 2, 1, 1);
-
-        SCMWOFZone1GainLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone1GainLabel->setObjectName(QStringLiteral("SCMWOFZone1GainLabel"));
-        SCMWOFZone1GainLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone1GainLabel, 2, 3, 1, 1);
-
-        SCMWOFZone1DeltaLabel = new QLabel(SCMWOFGroupBox);
-        SCMWOFZone1DeltaLabel->setObjectName(QStringLiteral("SCMWOFZone1DeltaLabel"));
-        SCMWOFZone1DeltaLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_8->addWidget(SCMWOFZone1DeltaLabel, 2, 4, 1, 1);
-
-
-        gridLayout_5->addWidget(SCMWOFGroupBox, 1, 2, 1, 1);
-
-        FakeFingerGroupBox = new QGroupBox(tab);
-        FakeFingerGroupBox->setObjectName(QStringLiteral("FakeFingerGroupBox"));
-        gridLayout_7 = new QGridLayout(FakeFingerGroupBox);
-        gridLayout_7->setSpacing(6);
-        gridLayout_7->setContentsMargins(11, 11, 11, 11);
-        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
-        FakeFingerLabel = new QLabel(FakeFingerGroupBox);
-        FakeFingerLabel->setObjectName(QStringLiteral("FakeFingerLabel"));
-        FakeFingerLabel->setAlignment(Qt::AlignCenter);
-
-        gridLayout_7->addWidget(FakeFingerLabel, 0, 0, 1, 1);
-
-
-        gridLayout_5->addWidget(FakeFingerGroupBox, 1, 3, 1, 2);
+        gridLayout_3->addWidget(SignalGroupBox, 0, 1, 1, 1);
 
         WOFGroupBox = new QGroupBox(tab);
         WOFGroupBox->setObjectName(QStringLiteral("WOFGroupBox"));
@@ -798,7 +651,7 @@ public:
         gridLayout_4->addWidget(WOFZone1FUDeltaLabel, 4, 4, 1, 1);
 
 
-        gridLayout_5->addWidget(WOFGroupBox, 0, 2, 1, 1);
+        gridLayout_3->addWidget(WOFGroupBox, 0, 2, 1, 1);
 
         NoFingerGroupBox = new QGroupBox(tab);
         NoFingerGroupBox->setObjectName(QStringLiteral("NoFingerGroupBox"));
@@ -813,7 +666,258 @@ public:
         gridLayout_6->addWidget(NoFingerLabel, 0, 0, 1, 1);
 
 
-        gridLayout_5->addWidget(NoFingerGroupBox, 0, 3, 1, 2);
+        gridLayout_3->addWidget(NoFingerGroupBox, 0, 3, 1, 1);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        ContuneroupBox = new QGroupBox(tab);
+        ContuneroupBox->setObjectName(QStringLiteral("ContuneroupBox"));
+        horizontalLayout_3 = new QHBoxLayout(ContuneroupBox);
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        DynamicRangeLabel = new QLabel(ContuneroupBox);
+        DynamicRangeLabel->setObjectName(QStringLiteral("DynamicRangeLabel"));
+
+        verticalLayout_6->addWidget(DynamicRangeLabel);
+
+        ContrastLabel = new QLabel(ContuneroupBox);
+        ContrastLabel->setObjectName(QStringLiteral("ContrastLabel"));
+
+        verticalLayout_6->addWidget(ContrastLabel);
+
+        HistCenteringLabel = new QLabel(ContuneroupBox);
+        HistCenteringLabel->setObjectName(QStringLiteral("HistCenteringLabel"));
+
+        verticalLayout_6->addWidget(HistCenteringLabel);
+
+        ClippingHighLabel = new QLabel(ContuneroupBox);
+        ClippingHighLabel->setObjectName(QStringLiteral("ClippingHighLabel"));
+
+        verticalLayout_6->addWidget(ClippingHighLabel);
+
+        ClippingLowLabel = new QLabel(ContuneroupBox);
+        ClippingLowLabel->setObjectName(QStringLiteral("ClippingLowLabel"));
+
+        verticalLayout_6->addWidget(ClippingLowLabel);
+
+        OverallScoreLabel = new QLabel(ContuneroupBox);
+        OverallScoreLabel->setObjectName(QStringLiteral("OverallScoreLabel"));
+
+        verticalLayout_6->addWidget(OverallScoreLabel);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_6);
+
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        DynamicRangeValueLabel = new QLabel(ContuneroupBox);
+        DynamicRangeValueLabel->setObjectName(QStringLiteral("DynamicRangeValueLabel"));
+
+        verticalLayout_5->addWidget(DynamicRangeValueLabel);
+
+        ContrastValueLabel = new QLabel(ContuneroupBox);
+        ContrastValueLabel->setObjectName(QStringLiteral("ContrastValueLabel"));
+
+        verticalLayout_5->addWidget(ContrastValueLabel);
+
+        HistCenteringValueLabel = new QLabel(ContuneroupBox);
+        HistCenteringValueLabel->setObjectName(QStringLiteral("HistCenteringValueLabel"));
+
+        verticalLayout_5->addWidget(HistCenteringValueLabel);
+
+        ClippingHighValueLabel = new QLabel(ContuneroupBox);
+        ClippingHighValueLabel->setObjectName(QStringLiteral("ClippingHighValueLabel"));
+
+        verticalLayout_5->addWidget(ClippingHighValueLabel);
+
+        ClippingLowValueLabel = new QLabel(ContuneroupBox);
+        ClippingLowValueLabel->setObjectName(QStringLiteral("ClippingLowValueLabel"));
+
+        verticalLayout_5->addWidget(ClippingLowValueLabel);
+
+        OverallScoreValueLabel = new QLabel(ContuneroupBox);
+        OverallScoreValueLabel->setObjectName(QStringLiteral("OverallScoreValueLabel"));
+
+        verticalLayout_5->addWidget(OverallScoreValueLabel);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_5);
+
+
+        horizontalLayout_2->addWidget(ContuneroupBox);
+
+        SharpnessGroupBox = new QGroupBox(tab);
+        SharpnessGroupBox->setObjectName(QStringLiteral("SharpnessGroupBox"));
+        gridLayout_5 = new QGridLayout(SharpnessGroupBox);
+        gridLayout_5->setSpacing(6);
+        gridLayout_5->setContentsMargins(11, 11, 11, 11);
+        gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
+        SharpnesZone1Label = new QLabel(SharpnessGroupBox);
+        SharpnesZone1Label->setObjectName(QStringLiteral("SharpnesZone1Label"));
+
+        gridLayout_5->addWidget(SharpnesZone1Label, 0, 0, 1, 1);
+
+        SharpnesZone1ValueLabel = new QLabel(SharpnessGroupBox);
+        SharpnesZone1ValueLabel->setObjectName(QStringLiteral("SharpnesZone1ValueLabel"));
+        SharpnesZone1ValueLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_5->addWidget(SharpnesZone1ValueLabel, 0, 1, 1, 1);
+
+        SharpnesZone2Label = new QLabel(SharpnessGroupBox);
+        SharpnesZone2Label->setObjectName(QStringLiteral("SharpnesZone2Label"));
+
+        gridLayout_5->addWidget(SharpnesZone2Label, 1, 0, 1, 1);
+
+        SharpnesZone2ValueLabel = new QLabel(SharpnessGroupBox);
+        SharpnesZone2ValueLabel->setObjectName(QStringLiteral("SharpnesZone2ValueLabel"));
+        SharpnesZone2ValueLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_5->addWidget(SharpnesZone2ValueLabel, 1, 1, 1, 1);
+
+        SharpnesZone3Label = new QLabel(SharpnessGroupBox);
+        SharpnesZone3Label->setObjectName(QStringLiteral("SharpnesZone3Label"));
+
+        gridLayout_5->addWidget(SharpnesZone3Label, 2, 0, 1, 1);
+
+        SharpnesZone3ValueLabel = new QLabel(SharpnessGroupBox);
+        SharpnesZone3ValueLabel->setObjectName(QStringLiteral("SharpnesZone3ValueLabel"));
+        SharpnesZone3ValueLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_5->addWidget(SharpnesZone3ValueLabel, 2, 1, 1, 1);
+
+        SharpnesOverAllLabel = new QLabel(SharpnessGroupBox);
+        SharpnesOverAllLabel->setObjectName(QStringLiteral("SharpnesOverAllLabel"));
+
+        gridLayout_5->addWidget(SharpnesOverAllLabel, 3, 0, 1, 1);
+
+        SharpnesOverAllValueLabel = new QLabel(SharpnessGroupBox);
+        SharpnesOverAllValueLabel->setObjectName(QStringLiteral("SharpnesOverAllValueLabel"));
+        SharpnesOverAllValueLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_5->addWidget(SharpnesOverAllValueLabel, 3, 1, 1, 1);
+
+
+        horizontalLayout_2->addWidget(SharpnessGroupBox);
+
+
+        gridLayout_3->addLayout(horizontalLayout_2, 1, 1, 1, 1);
+
+        SCMWOFGroupBox = new QGroupBox(tab);
+        SCMWOFGroupBox->setObjectName(QStringLiteral("SCMWOFGroupBox"));
+        gridLayout_8 = new QGridLayout(SCMWOFGroupBox);
+        gridLayout_8->setSpacing(6);
+        gridLayout_8->setContentsMargins(11, 11, 11, 11);
+        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        SCMWOFLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFLabel->setObjectName(QStringLiteral("SCMWOFLabel"));
+
+        gridLayout_8->addWidget(SCMWOFLabel, 0, 0, 1, 1);
+
+        SCMWOFNoFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFNoFingerLabel->setObjectName(QStringLiteral("SCMWOFNoFingerLabel"));
+        SCMWOFNoFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFNoFingerLabel, 0, 1, 1, 1);
+
+        SCMWOFWithFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFWithFingerLabel->setObjectName(QStringLiteral("SCMWOFWithFingerLabel"));
+        SCMWOFWithFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFWithFingerLabel, 0, 2, 1, 1);
+
+        SCMWOFGainLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFGainLabel->setObjectName(QStringLiteral("SCMWOFGainLabel"));
+        SCMWOFGainLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFGainLabel, 0, 3, 1, 1);
+
+        SCMWOFDeltaLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFDeltaLabel->setObjectName(QStringLiteral("SCMWOFDeltaLabel"));
+        SCMWOFDeltaLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFDeltaLabel, 0, 4, 1, 1);
+
+        SCMWOFZone0Label = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone0Label->setObjectName(QStringLiteral("SCMWOFZone0Label"));
+
+        gridLayout_8->addWidget(SCMWOFZone0Label, 1, 0, 1, 1);
+
+        SCMWOFZone1Label = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone1Label->setObjectName(QStringLiteral("SCMWOFZone1Label"));
+
+        gridLayout_8->addWidget(SCMWOFZone1Label, 2, 0, 1, 1);
+
+        SCMWOFZone0NoFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone0NoFingerLabel->setObjectName(QStringLiteral("SCMWOFZone0NoFingerLabel"));
+        SCMWOFZone0NoFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone0NoFingerLabel, 1, 1, 1, 1);
+
+        SCMWOFZone0WithFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone0WithFingerLabel->setObjectName(QStringLiteral("SCMWOFZone0WithFingerLabel"));
+        SCMWOFZone0WithFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone0WithFingerLabel, 1, 2, 1, 1);
+
+        SCMWOFZone0GainLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone0GainLabel->setObjectName(QStringLiteral("SCMWOFZone0GainLabel"));
+        SCMWOFZone0GainLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone0GainLabel, 1, 3, 1, 1);
+
+        SCMWOFZone0DeltaLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone0DeltaLabel->setObjectName(QStringLiteral("SCMWOFZone0DeltaLabel"));
+        SCMWOFZone0DeltaLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone0DeltaLabel, 1, 4, 1, 1);
+
+        SCMWOFZone1NoFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone1NoFingerLabel->setObjectName(QStringLiteral("SCMWOFZone1NoFingerLabel"));
+        SCMWOFZone1NoFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone1NoFingerLabel, 2, 1, 1, 1);
+
+        SCMWOFZone1WithFingerLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone1WithFingerLabel->setObjectName(QStringLiteral("SCMWOFZone1WithFingerLabel"));
+        SCMWOFZone1WithFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone1WithFingerLabel, 2, 2, 1, 1);
+
+        SCMWOFZone1GainLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone1GainLabel->setObjectName(QStringLiteral("SCMWOFZone1GainLabel"));
+        SCMWOFZone1GainLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone1GainLabel, 2, 3, 1, 1);
+
+        SCMWOFZone1DeltaLabel = new QLabel(SCMWOFGroupBox);
+        SCMWOFZone1DeltaLabel->setObjectName(QStringLiteral("SCMWOFZone1DeltaLabel"));
+        SCMWOFZone1DeltaLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_8->addWidget(SCMWOFZone1DeltaLabel, 2, 4, 1, 1);
+
+
+        gridLayout_3->addWidget(SCMWOFGroupBox, 1, 2, 1, 1);
+
+        FakeFingerGroupBox = new QGroupBox(tab);
+        FakeFingerGroupBox->setObjectName(QStringLiteral("FakeFingerGroupBox"));
+        gridLayout_7 = new QGridLayout(FakeFingerGroupBox);
+        gridLayout_7->setSpacing(6);
+        gridLayout_7->setContentsMargins(11, 11, 11, 11);
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        FakeFingerLabel = new QLabel(FakeFingerGroupBox);
+        FakeFingerLabel->setObjectName(QStringLiteral("FakeFingerLabel"));
+        FakeFingerLabel->setAlignment(Qt::AlignCenter);
+
+        gridLayout_7->addWidget(FakeFingerLabel, 0, 0, 1, 1);
+
+
+        gridLayout_3->addWidget(FakeFingerGroupBox, 1, 3, 1, 1);
 
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
@@ -846,7 +950,7 @@ public:
         YangpuClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(YangpuClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 885, 21));
+        menuBar->setGeometry(QRect(0, 0, 985, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuEdit = new QMenu(menuBar);
@@ -937,33 +1041,6 @@ public:
         SNRZone5ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         SNRZone6ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         SNROverAllValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SharpnessGroupBox->setTitle(QApplication::translate("YangpuClass", "Sharpness", 0));
-        SharpnesZone1Label->setText(QApplication::translate("YangpuClass", "Zone1", 0));
-        SharpnesZone1ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SharpnesZone2Label->setText(QApplication::translate("YangpuClass", "Zone2", 0));
-        SharpnesZone2ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SharpnesZone3Label->setText(QApplication::translate("YangpuClass", "Zone3", 0));
-        SharpnesZone3ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SharpnesOverAllLabel->setText(QApplication::translate("YangpuClass", "OverAll", 0));
-        SharpnesOverAllValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFGroupBox->setTitle(QApplication::translate("YangpuClass", "SCM_WOF", 0));
-        SCMWOFLabel->setText(QApplication::translate("YangpuClass", "Tag/Value", 0));
-        SCMWOFNoFingerLabel->setText(QApplication::translate("YangpuClass", "NoFinger", 0));
-        SCMWOFWithFingerLabel->setText(QApplication::translate("YangpuClass", "WithFinger", 0));
-        SCMWOFGainLabel->setText(QApplication::translate("YangpuClass", "Gain", 0));
-        SCMWOFDeltaLabel->setText(QApplication::translate("YangpuClass", "Delta", 0));
-        SCMWOFZone0Label->setText(QApplication::translate("YangpuClass", "Zone0/Bottom", 0));
-        SCMWOFZone1Label->setText(QApplication::translate("YangpuClass", "Zone1/Top", 0));
-        SCMWOFZone0NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone0WithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone0GainLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone0DeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone1NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone1WithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone1GainLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        SCMWOFZone1DeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
-        FakeFingerGroupBox->setTitle(QApplication::translate("YangpuClass", "Normalized FakeFinger", 0));
-        FakeFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         WOFGroupBox->setTitle(QApplication::translate("YangpuClass", "WOF", 0));
         WOFTagLabel->setText(QApplication::translate("YangpuClass", "Tag/Value", 0));
         WOFNoFingerLabel->setText(QApplication::translate("YangpuClass", "NoFinger", 0));
@@ -992,6 +1069,46 @@ public:
         WOFZone1FUDeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         NoFingerGroupBox->setTitle(QApplication::translate("YangpuClass", "Average No Finger", 0));
         NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        ContuneroupBox->setTitle(QApplication::translate("YangpuClass", "Contune", 0));
+        DynamicRangeLabel->setText(QApplication::translate("YangpuClass", "Dynamic Range", 0));
+        ContrastLabel->setText(QApplication::translate("YangpuClass", "Contrast", 0));
+        HistCenteringLabel->setText(QApplication::translate("YangpuClass", "Hist Centering", 0));
+        ClippingHighLabel->setText(QApplication::translate("YangpuClass", "Clipping High", 0));
+        ClippingLowLabel->setText(QApplication::translate("YangpuClass", "Clipping Low", 0));
+        OverallScoreLabel->setText(QApplication::translate("YangpuClass", "Overall Score", 0));
+        DynamicRangeValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        ContrastValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        HistCenteringValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        ClippingHighValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        ClippingLowValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        OverallScoreValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SharpnessGroupBox->setTitle(QApplication::translate("YangpuClass", "Sharpness", 0));
+        SharpnesZone1Label->setText(QApplication::translate("YangpuClass", "Zone1", 0));
+        SharpnesZone1ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SharpnesZone2Label->setText(QApplication::translate("YangpuClass", "Zone2", 0));
+        SharpnesZone2ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SharpnesZone3Label->setText(QApplication::translate("YangpuClass", "Zone3", 0));
+        SharpnesZone3ValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SharpnesOverAllLabel->setText(QApplication::translate("YangpuClass", "OverAll", 0));
+        SharpnesOverAllValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFGroupBox->setTitle(QApplication::translate("YangpuClass", "SCM_WOF", 0));
+        SCMWOFLabel->setText(QApplication::translate("YangpuClass", "Tag/Value", 0));
+        SCMWOFNoFingerLabel->setText(QApplication::translate("YangpuClass", "NoFinger", 0));
+        SCMWOFWithFingerLabel->setText(QApplication::translate("YangpuClass", "WithFinger", 0));
+        SCMWOFGainLabel->setText(QApplication::translate("YangpuClass", "Gain", 0));
+        SCMWOFDeltaLabel->setText(QApplication::translate("YangpuClass", "Delta", 0));
+        SCMWOFZone0Label->setText(QApplication::translate("YangpuClass", "Zone0/Bottom", 0));
+        SCMWOFZone1Label->setText(QApplication::translate("YangpuClass", "Zone1/Top", 0));
+        SCMWOFZone0NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone0WithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone0GainLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone0DeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone1NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone1WithFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone1GainLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        SCMWOFZone1DeltaLabel->setText(QApplication::translate("YangpuClass", "--", 0));
+        FakeFingerGroupBox->setTitle(QApplication::translate("YangpuClass", "Normalized FakeFinger", 0));
+        FakeFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("YangpuClass", "Detail Info", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("YangpuClass", "NoFinger Data", 0));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("YangpuClass", "FakeFinger Data", 0));
