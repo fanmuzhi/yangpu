@@ -1373,11 +1373,11 @@ void Yangpu::SaveExcel()
 								itemOverallScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(OverallScore)));
 						}
 					}
-
-					free(values);
-					values = NULL;
-					::remove("Contune.bmp");
 				}
+
+				free(values);
+				values = NULL;
+				::remove("Contune.bmp");
 			}
 		}
 	}
