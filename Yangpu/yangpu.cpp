@@ -23,7 +23,9 @@ Yangpu::Yangpu(QWidget *parent)
 
 	QObject::connect(ui.actionSave, SIGNAL(triggered(bool)), this, SLOT(SaveExcel()));
 
-	QObject::connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(TableWidgetCellClicked(int, int)));
+	//QObject::connect(ui.tableWidget, SIGNAL(cellClicked(int, int)), this, SLOT(TableWidgetCellClicked(int, int)));
+	//QObject::connect(ui.tableWidget, SIGNAL(cellPressed(int, int)), this, SLOT(TableWidgetCellClicked(int, int)));
+	QObject::connect(ui.tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(TableWidgetItemClicked()));
 
 	QObject::connect(ui.actionSingal_Item, SIGNAL(triggered(bool)), this, SLOT(SavePicSingalItem()));
 
@@ -218,6 +220,9 @@ void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
 			ui.tableWidget->setItem(t, 6, itemBindeCodes);
 		}
 	}
+
+	//Init first line selected:
+	ui.tableWidget->setCurrentCell(0, 0);
 }
 
 void Yangpu::ClearLogAnalyze()
@@ -319,6 +324,18 @@ void Yangpu::InitWidgetState()
 	ui.FakeFingerDataTableWidget->setRowCount(0);
 	ui.FakeFingerDataTableWidget->setColumnCount(0);
 
+}
+
+void Yangpu::TableWidgetItemClicked()
+{
+	QList<QTableWidgetItem *> ListOfSelectedItems = ui.tableWidget->selectedItems();
+	if (0 == ListOfSelectedItems.size())
+		return;
+	
+	if (NULL == ListOfSelectedItems.first())
+		return;
+
+	TableWidgetCellClicked(ListOfSelectedItems.first()->row(), 0);
 }
 
 void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)

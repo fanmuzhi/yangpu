@@ -31,6 +31,8 @@ public Q_SLOTS:
 
 	void dropEvent(QDropEvent * event);
 
+	void TableWidgetItemClicked();
+
 	void TableWidgetCellClicked(int rowNumber, int columnNumber);
 
 	void SaveExcel();
