@@ -8,6 +8,12 @@
 
 #include "Syn_LogUtils.h"
 
+#define CONTUNE_LIMIT_DynamicRange		50
+#define CONTUNE_LIMIT_Contrast			32
+#define CONTUNE_LIMIT_HistCentering		60
+#define CONTUNE_LIMIT_ClippingHigh		80
+#define CONTUNE_LIMIT_ClippingLow		80
+
 Yangpu::Yangpu(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -36,6 +42,32 @@ Yangpu::Yangpu(QWidget *parent)
 
 Yangpu::~Yangpu()
 {
+}
+
+void Yangpu::keyPressEvent(QKeyEvent * ev)
+{
+	if (ev->key() == Qt::Key_Delete)
+	{
+		int rowNumber = ui.tableWidget->rowCount();
+		if (0 == rowNumber)
+			return;
+
+		unsigned int counts = _ListOfLogAnalyze.size();
+		if (rowNumber != counts)
+			return;
+
+		unsigned SelectRowNumber(0);
+		SelectRowNumber = ui.tableWidget->currentRow();
+
+		delete _ListOfLogAnalyze[SelectRowNumber];
+		_ListOfLogAnalyze[SelectRowNumber] = NULL;
+
+		std::vector<Syn_LogAnalyze*>::iterator it = _ListOfLogAnalyze.begin() + SelectRowNumber;
+		_ListOfLogAnalyze.erase(it);
+
+		this->InitWidgetState();
+		ui.tableWidget->removeRow(SelectRowNumber);
+	}
 }
 
 void Yangpu::Exit()
@@ -326,12 +358,12 @@ void Yangpu::InitWidgetState()
 	ui.FakeFingerDataTableWidget->setColumnCount(0);
 
 	//Contune
-	ui.DynamicRangeValueLabel->setText("--");
-	ui.ContrastValueLabel->setText("--");
-	ui.HistCenteringValueLabel->setText("--");
-	ui.ClippingHighValueLabel->setText("--");
-	ui.ClippingLowValueLabel->setText("--");
-	ui.OverallScoreValueLabel->setText("--");
+	ui.DynamicRangeValueLabel->setText("--"); ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
+	ui.ContrastValueLabel->setText("--"); ui.ContrastValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
+	ui.HistCenteringValueLabel->setText("--"); ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
+	ui.ClippingHighValueLabel->setText("--"); ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
+	ui.ClippingLowValueLabel->setText("--"); ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
+	ui.OverallScoreValueLabel->setText("--"); //ui.OverallScoreValueLabel->setStyleSheet("background-color: rgb(255, 255, 255);color: rgb(0,0,0);");
 }
 
 void Yangpu::TableWidgetItemClicked()
@@ -613,12 +645,37 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 						int scoreStatus = Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
 						if (0 == scoreStatus)
 						{
-							ui.DynamicRangeValueLabel->setText(QString::number(DynamicRange));
-							ui.ContrastValueLabel->setText(QString::number(Contrast));
-							ui.HistCenteringValueLabel->setText(QString::number(HistCentering));
-							ui.ClippingHighValueLabel->setText(QString::number(ClippingHigh));
-							ui.ClippingLowValueLabel->setText(QString::number(ClippingLow));
-							ui.OverallScoreValueLabel->setText(QString::number(OverallScore));
+							ui.DynamicRangeValueLabel->setText(QString("  ") + QString::number(DynamicRange) + QString("  "));
+							if (DynamicRange>CONTUNE_LIMIT_DynamicRange)
+								ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+							else
+								ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+
+							ui.ContrastValueLabel->setText(QString("  ") + QString::number(Contrast) + QString("  "));
+							if (Contrast>CONTUNE_LIMIT_Contrast)
+								ui.ContrastValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+							else
+								ui.ContrastValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+
+							ui.HistCenteringValueLabel->setText(QString("  ") + QString::number(HistCentering) + QString("  "));
+							if (HistCentering>CONTUNE_LIMIT_HistCentering)
+								ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+							else
+								ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+
+							ui.ClippingHighValueLabel->setText(QString("  ") + QString::number(ClippingHigh) + QString("  "));
+							if (ClippingHigh>CONTUNE_LIMIT_ClippingHigh)
+								ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+							else
+								ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+
+							ui.ClippingLowValueLabel->setText(QString("  ") + QString::number(ClippingLow) + QString("  "));
+							if (ClippingLow>CONTUNE_LIMIT_ClippingLow)
+								ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+							else
+								ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+							
+							ui.OverallScoreValueLabel->setText(QString("  ") + QString::number(OverallScore) + QString("  "));
 						}
 					}
 

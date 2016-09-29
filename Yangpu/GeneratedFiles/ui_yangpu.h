@@ -1070,11 +1070,11 @@ public:
         NoFingerGroupBox->setTitle(QApplication::translate("YangpuClass", "Average No Finger", 0));
         NoFingerLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         ContuneroupBox->setTitle(QApplication::translate("YangpuClass", "Contune", 0));
-        DynamicRangeLabel->setText(QApplication::translate("YangpuClass", "Dynamic Range", 0));
-        ContrastLabel->setText(QApplication::translate("YangpuClass", "Contrast", 0));
-        HistCenteringLabel->setText(QApplication::translate("YangpuClass", "Hist Centering", 0));
-        ClippingHighLabel->setText(QApplication::translate("YangpuClass", "Clipping High", 0));
-        ClippingLowLabel->setText(QApplication::translate("YangpuClass", "Clipping Low", 0));
+        DynamicRangeLabel->setText(QApplication::translate("YangpuClass", "Dynamic Range (Threshold:50)", 0));
+        ContrastLabel->setText(QApplication::translate("YangpuClass", "Contrast            (Threshold:32)", 0));
+        HistCenteringLabel->setText(QApplication::translate("YangpuClass", "Hist Centering   (Threshold:60)", 0));
+        ClippingHighLabel->setText(QApplication::translate("YangpuClass", "Clipping High     (Threshold:80)", 0));
+        ClippingLowLabel->setText(QApplication::translate("YangpuClass", "Clipping Low      (Threshold:80)", 0));
         OverallScoreLabel->setText(QApplication::translate("YangpuClass", "Overall Score", 0));
         DynamicRangeValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));
         ContrastValueLabel->setText(QApplication::translate("YangpuClass", "--", 0));

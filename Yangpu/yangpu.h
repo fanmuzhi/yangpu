@@ -47,6 +47,8 @@ public:
 
 public Q_SLOTS:
 
+	void keyPressEvent(QKeyEvent * ev);
+
 	void Exit();
 
 	void OpenFile();

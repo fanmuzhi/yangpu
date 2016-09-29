@@ -721,35 +721,35 @@
                <item>
                 <widget class="QLabel" name="DynamicRangeLabel">
                  <property name="text">
-                  <string>Dynamic Range</string>
+                  <string>Dynamic Range (Threshold:50)</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="ContrastLabel">
                  <property name="text">
-                  <string>Contrast</string>
+                  <string>Contrast            (Threshold:32)</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="HistCenteringLabel">
                  <property name="text">
-                  <string>Hist Centering</string>
+                  <string>Hist Centering   (Threshold:60)</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="ClippingHighLabel">
                  <property name="text">
-                  <string>Clipping High</string>
+                  <string>Clipping High     (Threshold:80)</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="ClippingLowLabel">
                  <property name="text">
-                  <string>Clipping Low</string>
+                  <string>Clipping Low      (Threshold:80)</string>
                  </property>
                 </widget>
                </item>
