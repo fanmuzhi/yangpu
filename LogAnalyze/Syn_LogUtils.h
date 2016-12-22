@@ -212,7 +212,7 @@ typedef struct
 struct Syn_LogAnalyzeValue
 {
 	unsigned SiteNumber;
-	uint32_t DeviceSerialNumber;
+	std::string DeviceSerialNumber;
 	std::string SW_Version;
 	std::string ConfigFilePath;
 	std::string TestDate;

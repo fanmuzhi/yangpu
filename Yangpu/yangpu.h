@@ -35,6 +35,8 @@ typedef enum conTuneScoreStatus {
 
 #define CONTUNE_BMP_HEADER_MINSIZE 54
 
+typedef int(*ContuneFunc)(const unsigned int *, unsigned int, unsigned int, float *, float *, float *, float *, float *, float *);
+
 class Yangpu : public QMainWindow
 {
 	Q_OBJECT
@@ -79,6 +81,10 @@ private:
 	Ui::YangpuClass ui;
 
 	vector<Syn_LogAnalyze*> _ListOfLogAnalyze;
+
+	HINSTANCE _hDLL;
+
+	ContuneFunc _Contune;
 };
 
 #endif // YANGPU_H

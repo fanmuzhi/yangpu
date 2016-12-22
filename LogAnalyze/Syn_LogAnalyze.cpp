@@ -119,7 +119,7 @@ int Syn_LogAnalyze::AnalyzeAndFill(std::vector<std::string> &ioListOfLineContent
 
 	this->InitLogAnalyzeValue();
 
-	_pSyn_LogAnalyzeValue->DeviceSerialNumber = 0;
+	_pSyn_LogAnalyzeValue->DeviceSerialNumber = "";
 	for (size_t t = 0; t < listSize; t++)
 	{
 		std::vector<std::string> listOfValue;
@@ -135,7 +135,7 @@ int Syn_LogAnalyze::AnalyzeAndFill(std::vector<std::string> &ioListOfLineContent
 			if (currentLineSize >= 3)
 			{
 				_pSyn_LogAnalyzeValue->SiteNumber = std::stoi(listOfValue[1]);
-				_pSyn_LogAnalyzeValue->DeviceSerialNumber = std::stoi(listOfValue[2]);
+				_pSyn_LogAnalyzeValue->DeviceSerialNumber = listOfValue[2];
 			}
 		}
 		else if ("Version" == strTagValue)

@@ -15,7 +15,9 @@
 #define CONTUNE_LIMIT_ClippingLow		80
 
 Yangpu::Yangpu(QWidget *parent)
-	: QMainWindow(parent)
+: QMainWindow(parent)
+, _hDLL(NULL)
+, _Contune(NULL)
 {
 	ui.setupUi(this);
 
@@ -38,10 +40,31 @@ Yangpu::Yangpu(QWidget *parent)
 	QObject::connect(ui.actionSingal_Item, SIGNAL(triggered(bool)), this, SLOT(SavePicSingalItem()));
 
 	QObject::connect(ui.actionAll_Item, SIGNAL(triggered(bool)), this, SLOT(SavePicAllItem()));
+
+	_hDLL = LoadLibrary(TEXT("contune.dll"));
+	if (NULL == _hDLL)
+	{
+		FreeLibrary(_hDLL);
+		_hDLL = NULL;
+	}
+	else
+	{
+		_Contune = (ContuneFunc)GetProcAddress(_hDLL, "contune_score");
+		if (NULL == _Contune)
+		{
+			FreeLibrary(_hDLL);
+			_hDLL = NULL;
+		}
+	}
 }
 
 Yangpu::~Yangpu()
 {
+	if (NULL != _hDLL)
+	{
+		FreeLibrary(_hDLL);
+		_hDLL = NULL;
+	}
 }
 
 void Yangpu::keyPressEvent(QKeyEvent * ev)
@@ -406,8 +429,8 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 	{
 		ui.ConfigFileLineEdit->setText(QString::fromStdString(pSyn_LogAnalyzeValue->ConfigFilePath));
 	}
-	if (0 != pSyn_LogAnalyzeValue->DeviceSerialNumber)
-		ui.textBrowser->append("Device SerialNumber:" + QString::number(pSyn_LogAnalyzeValue->DeviceSerialNumber) + "\n");
+	if (0 != pSyn_LogAnalyzeValue->DeviceSerialNumber.size())
+		ui.textBrowser->append("Device SerialNumber:" + QString::fromStdString(pSyn_LogAnalyzeValue->DeviceSerialNumber) + "\n");
 	if (0 != pSyn_LogAnalyzeValue->TestDate.size())
 		ui.textBrowser->append("Test Time:" + QString::fromStdString(pSyn_LogAnalyzeValue->TestDate) + "\n");
 	for (auto iter = pSyn_LogAnalyzeValue->mapOfTagValue.begin(); iter != pSyn_LogAnalyzeValue->mapOfTagValue.end(); iter++)
@@ -614,78 +637,60 @@ void Yangpu::TableWidgetCellClicked(int rowNumber, int columnNumber)
 			ui.FakeFingerDataTableWidget->resizeColumnToContents(i);
 		}
 
-		HINSTANCE hdll;
-		typedef int(*ContuneFunc)(const unsigned int *, unsigned int, unsigned int, float *, float *, float *, float *, float *, float *);
-		ContuneFunc Contune;
-		hdll = LoadLibrary(TEXT("contune.dll"));
-		if (hdll == NULL)
+		if (NULL != _Contune)
 		{
-			FreeLibrary(hdll);
-		}
-		else
-		{
-			Contune = (ContuneFunc)GetProcAddress(hdll, "contune_score");
-			if (Contune == NULL)
+			unsigned int *values = NULL;
+			values = (unsigned int*)malloc(sizeof(unsigned int)*MAX_VALUES);
+			if (values)
 			{
-				FreeLibrary(hdll);
-			}
-			else
-			{
-				unsigned int *values = NULL;
-				values = (unsigned int*)malloc(sizeof(unsigned int)*MAX_VALUES);
-				if (values)
+				image.save("Contune.bmp");
+				int imageWidth = 0;
+				int imageHeight = 0;
+				contune_bmp_status status = this->contune_test_read_bmp("Contune.bmp", &imageWidth, &imageHeight, values);
+				if (CONTUNE_BMP_STATUS_OK == status)
 				{
-					image.save("Contune.bmp");
-					int imageWidth = 0;
-					int imageHeight = 0;
-					contune_bmp_status status = this->contune_test_read_bmp("Contune.bmp", &imageWidth, &imageHeight,values);
-					if (CONTUNE_BMP_STATUS_OK == status)
+					float DynamicRange(0), Contrast(0), HistCentering(0), ClippingHigh(0), ClippingLow(0), OverallScore(0);
+					int scoreStatus = _Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
+					if (0 == scoreStatus)
 					{
-						float DynamicRange(0), Contrast(0), HistCentering(0), ClippingHigh(0), ClippingLow(0), OverallScore(0);
-						int scoreStatus = Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
-						if (0 == scoreStatus)
-						{
-							ui.DynamicRangeValueLabel->setText(QString("  ") + QString::number(DynamicRange) + QString("  "));
-							if (DynamicRange>CONTUNE_LIMIT_DynamicRange)
-								ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
-							else
-								ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+						ui.DynamicRangeValueLabel->setText(QString("  ") + QString::number(DynamicRange) + QString("  "));
+						if (DynamicRange>CONTUNE_LIMIT_DynamicRange)
+							ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+						else
+							ui.DynamicRangeValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
 
-							ui.ContrastValueLabel->setText(QString("  ") + QString::number(Contrast) + QString("  "));
-							if (Contrast>CONTUNE_LIMIT_Contrast)
-								ui.ContrastValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
-							else
-								ui.ContrastValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+						ui.ContrastValueLabel->setText(QString("  ") + QString::number(Contrast) + QString("  "));
+						if (Contrast>CONTUNE_LIMIT_Contrast)
+							ui.ContrastValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+						else
+							ui.ContrastValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
 
-							ui.HistCenteringValueLabel->setText(QString("  ") + QString::number(HistCentering) + QString("  "));
-							if (HistCentering>CONTUNE_LIMIT_HistCentering)
-								ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
-							else
-								ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+						ui.HistCenteringValueLabel->setText(QString("  ") + QString::number(HistCentering) + QString("  "));
+						if (HistCentering>CONTUNE_LIMIT_HistCentering)
+							ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+						else
+							ui.HistCenteringValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
 
-							ui.ClippingHighValueLabel->setText(QString("  ") + QString::number(ClippingHigh) + QString("  "));
-							if (ClippingHigh>CONTUNE_LIMIT_ClippingHigh)
-								ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
-							else
-								ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+						ui.ClippingHighValueLabel->setText(QString("  ") + QString::number(ClippingHigh) + QString("  "));
+						if (ClippingHigh>CONTUNE_LIMIT_ClippingHigh)
+							ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+						else
+							ui.ClippingHighValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
 
-							ui.ClippingLowValueLabel->setText(QString("  ") + QString::number(ClippingLow) + QString("  "));
-							if (ClippingLow>CONTUNE_LIMIT_ClippingLow)
-								ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
-							else
-								ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
-							
-							ui.OverallScoreValueLabel->setText(QString("  ") + QString::number(OverallScore) + QString("  "));
-						}
+						ui.ClippingLowValueLabel->setText(QString("  ") + QString::number(ClippingLow) + QString("  "));
+						if (ClippingLow>CONTUNE_LIMIT_ClippingLow)
+							ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(0, 255, 0);color: rgb(0,0,0);");
+						else
+							ui.ClippingLowValueLabel->setStyleSheet("background-color: rgb(255, 0, 0);color: rgb(0,0,0);");
+
+						ui.OverallScoreValueLabel->setText(QString("  ") + QString::number(OverallScore) + QString("  "));
 					}
-
-					free(values);
-					values = NULL;
-					::remove("Contune.bmp");
 				}
-			}
 
-			FreeLibrary(hdll);
+				free(values);
+				values = NULL;
+				::remove("Contune.bmp");
+			}
 		}
 	}
 }
@@ -1062,23 +1067,6 @@ void Yangpu::SaveExcel()
 		merge_range->setProperty("MergeCells", true);
 	}*/
 
-	HINSTANCE hdll;
-	typedef int(*ContuneFunc)(const unsigned int *,unsigned int,unsigned int,float *,float *,float *,float *,float *,float *);
-	ContuneFunc Contune;
-	hdll = LoadLibrary(TEXT("contune.dll"));
-	if (hdll == NULL)
-	{
-		FreeLibrary(hdll);
-	}
-	else
-	{
-		Contune = (ContuneFunc)GetProcAddress(hdll, "contune_score");
-		if (Contune == NULL)
-		{
-			FreeLibrary(hdll);
-		}
-	}
-
 	QAxObject *ContuneTitleCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(1));
 	if (NULL != ContuneTitleCell)
 	{
@@ -1389,7 +1377,7 @@ void Yangpu::SaveExcel()
 				}
 			}*/
 
-			if (hdll&&Contune)
+			if (NULL!=_Contune)
 			{
 				unsigned int *values = NULL;
 				values = (unsigned int*)malloc(sizeof(unsigned int)*MAX_VALUES);
@@ -1402,7 +1390,7 @@ void Yangpu::SaveExcel()
 					if (CONTUNE_BMP_STATUS_OK == status)
 					{
 						float DynamicRange(0), Contrast(0), HistCentering(0), ClippingHigh(0), ClippingLow(0), OverallScore(0);
-						int scoreStatus = Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
+						int scoreStatus = _Contune(values, imageWidth, imageHeight, &DynamicRange, &Contrast, &HistCentering, &ClippingHigh, &ClippingLow, &OverallScore);
 						if (0 == scoreStatus)
 						{
 							QAxObject *itemDynamicRangeCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AF" + QString::number(i + 3));
@@ -1438,9 +1426,6 @@ void Yangpu::SaveExcel()
 			}
 		}
 	}
-
-	if (hdll)
-		FreeLibrary(hdll);
 
 	QAxObject *used_range = worksheet->querySubObject("UsedRange");
 	QAxObject *columns = used_range->querySubObject("Columns");
