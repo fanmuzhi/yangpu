@@ -487,17 +487,32 @@ int Syn_LogAnalyze::AnalyzeAndFill(std::vector<std::string> &ioListOfLineContent
 		}
 		else if ("Current Test" == strTagValue)
 		{
-			if (currentLineSize < 5 || (t + 1) >= listSize)
+			if (currentLineSize < 3 || (t + 2) >= listSize)
 				continue;
 			_pSyn_LogAnalyzeValue->CurrentTestResult.bExcuted = true;
 			_pSyn_LogAnalyzeValue->CurrentTestResult.strTestResult = listOfValue[1];
-			_pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqDigCurrent_uA = std::stof(listOfValue[4]);
 			std::vector<std::string> listOfNextLineValue;
 			rc = DivideLineContent(ioListOfLineContent[t + 1], listOfNextLineValue);
 			if (rc == Syn_OK)
-			{
+				_pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqDigCurrent_uA = std::stof(listOfNextLineValue[1]);
+			rc = DivideLineContent(ioListOfLineContent[t + 2], listOfNextLineValue);
+			if (rc == Syn_OK)
 				_pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqAnaCurrent_uA = std::stof(listOfNextLineValue[1]);
-			}
+		}
+		else if ("Deep Sleep Current Test" == strTagValue)
+		{
+			if (currentLineSize < 3 || (t + 2) >= listSize)
+				continue;
+			_pSyn_LogAnalyzeValue->DeepSleepTestResult.bExcuted = true;
+			_pSyn_LogAnalyzeValue->DeepSleepTestResult.strTestResult = listOfValue[1];
+			std::vector<std::string> listOfNextLineValue;
+			rc = DivideLineContent(ioListOfLineContent[t + 1], listOfNextLineValue);
+			if (rc == Syn_OK)
+				_pSyn_LogAnalyzeValue->DeepSleepTestResult.spivcc_current_uA = std::stof(listOfNextLineValue[1]);
+			rc = DivideLineContent(ioListOfLineContent[t + 2], listOfNextLineValue);
+			if (rc == Syn_OK)
+				_pSyn_LogAnalyzeValue->DeepSleepTestResult.vcc_current_uA = std::stof(listOfNextLineValue[1]);
+			
 		}
 		else if ("Retain Mode Test" == strTagValue)
 		{

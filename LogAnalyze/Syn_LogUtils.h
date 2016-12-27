@@ -146,6 +146,14 @@ typedef struct
 {
 	bool bExcuted;
 	std::string strTestResult;
+	float spivcc_current_uA;
+	float vcc_current_uA;
+}Syn_DeepSleepTestResult;
+
+typedef struct
+{
+	bool bExcuted;
+	std::string strTestResult;
 	float RetainModeCurrent;
 }Syn_RetainModeTestResult;
 
@@ -239,6 +247,7 @@ struct Syn_LogAnalyzeValue
 	Syn_DRdyTestResult				DRdyTestResult;
 	Syn_ConsecutivePixelsTestResult ConsecutivePixelsTestResult;
 	Syn_CurrentTestResult			CurrentTestResult;
+	Syn_DeepSleepTestResult			DeepSleepTestResult;
 	Syn_RetainModeTestResult		RetainModeTestResult;
 	Syn_SNRTestResult				SNRTestResult;
 	Syn_PixelUniformityTestResult	PixelUniformityTestResult;
