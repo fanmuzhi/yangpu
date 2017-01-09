@@ -1103,7 +1103,64 @@ void Yangpu::SaveExcel()
 		if (NULL != OverallScoreCell)
 			OverallScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Overall Score")));
 	}
+
+	QAxObject *CalibrationCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AL" + QString::number(1));
+	if (NULL != CalibrationCell)
+		CalibrationCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Calibration")));
+	QAxObject *CalibrationStage2VarianceScoreCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AL" + QString::number(2));
+	if (NULL != CalibrationStage2VarianceScoreCell)
+		CalibrationStage2VarianceScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Stage2 Variance Score")));
 	
+	QAxObject *CurrentTestCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AM" + QString::number(1));
+	if (NULL != CurrentTestCell)
+	{
+		CurrentTestCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Current Test")));
+
+		QString merge_cell;
+		merge_cell.append("AM");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AN");
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *DigitalCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AM" + QString::number(2));
+		if (NULL != DigitalCell)
+			DigitalCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Digital image acq current (uA)")));
+		QAxObject *AnalogCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AN" + QString::number(2));
+		if (NULL != AnalogCell)
+			AnalogCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Analog image acq current (uA)")));
+	}
+
+	QAxObject *DeepSleepCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AO" + QString::number(1));
+	if (NULL != DeepSleepCell)
+	{
+		DeepSleepCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("Deep Sleep Current Test")));
+
+		QString merge_cell;
+		merge_cell.append("AO");
+		merge_cell.append(QString::number(1));
+		merge_cell.append(":");
+		merge_cell.append("AP");
+		merge_cell.append(QString::number(1));
+		QAxObject *merge_range = worksheet->querySubObject("Range(const QString&)", merge_cell);
+		merge_range->setProperty("HorizontalAlignment", -4108);
+		merge_range->setProperty("VerticalAlignment", -4108);
+		merge_range->setProperty("WrapText", true);
+		merge_range->setProperty("MergeCells", true);
+
+		QAxObject *spivcc_cur_Cell = worksheet->querySubObject("Range(QVariant, QVariant)", "AO" + QString::number(2));
+		if (NULL != spivcc_cur_Cell)
+			spivcc_cur_Cell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("spivcc current (uA)")));
+		QAxObject *vcc_cur_Cell = worksheet->querySubObject("Range(QVariant, QVariant)", "AP" + QString::number(2));
+		if (NULL != vcc_cur_Cell)
+			vcc_cur_Cell->dynamicCall("SetValue(const QVariant&)", QVariant(QString("vcc current (uA)")));
+	}
+
 	//content
 	for (unsigned i = 0; i<ListCounts; i++)
 	{
@@ -1424,6 +1481,40 @@ void Yangpu::SaveExcel()
 				values = NULL;
 				::remove("Contune.bmp");
 			}
+		}
+
+		if (pSyn_LogAnalyzeValue->CablicationResult.bExcuted)
+		{
+			QAxObject *itemStage2VarianceScoreCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AL" + QString::number(i + 3));
+			if (NULL != itemStage2VarianceScoreCell)
+				itemStage2VarianceScoreCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::fromStdString(pSyn_LogAnalyzeValue->CablicationResult.strStage2VarianceScore)));
+		}
+
+		if (pSyn_LogAnalyzeValue->CurrentTestResult.bExcuted)
+		{
+			QAxObject *itemDigitalCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AM" + QString::number(i + 3));
+			if (NULL != itemDigitalCell)
+				itemDigitalCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqDigCurrent_uA)));
+			QAxObject *itemAnalogCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AN" + QString::number(i + 3));
+			if (NULL != itemAnalogCell)
+				itemAnalogCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqAnaCurrent_uA)));
+		}
+
+		if (pSyn_LogAnalyzeValue->DeepSleepTestResult.bExcuted)
+		{
+			QAxObject *itemDigitalCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AM" + QString::number(i + 3));
+			if (NULL != itemDigitalCell)
+				itemDigitalCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqDigCurrent_uA)));
+			QAxObject *itemAnalogCell = worksheet->querySubObject("Range(QVariant, QVariant)", "AN" + QString::number(i + 3));
+			if (NULL != itemAnalogCell)
+				itemAnalogCell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->CurrentTestResult.ImageAcqAnaCurrent_uA)));
+
+			QAxObject *item_spivcc_cur_Cell = worksheet->querySubObject("Range(QVariant, QVariant)", "AO" + QString::number(i + 3));
+			if (NULL != item_spivcc_cur_Cell)
+				item_spivcc_cur_Cell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->DeepSleepTestResult.spivcc_current_uA)));
+			QAxObject *item_vcc_cur_Cell = worksheet->querySubObject("Range(QVariant, QVariant)", "AP" + QString::number(i + 3));
+			if (NULL != item_vcc_cur_Cell)
+				item_vcc_cur_Cell->dynamicCall("SetValue(const QVariant&)", QVariant(QString::number(pSyn_LogAnalyzeValue->DeepSleepTestResult.vcc_current_uA)));
 		}
 	}
 
