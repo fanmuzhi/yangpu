@@ -24,15 +24,15 @@ public:
 	Syn_LogAnalyze();
 	virtual ~Syn_LogAnalyze();
 
-	int LogAnalysis(std::string strLogFilePath);
+	int LogAnalysis(std::wstring strLogFilePath);
 
 	int GetLogContent(Syn_LogAnalyzeValue * &oLogAnalyzeValue);
 
-	std::string GetLogFilePath();
+	std::wstring GetLogFilePath();
 
 protected:
 
-	int GetListOfLineContent(std::string strLogFilePath, std::vector<std::string> &oListOfLineContent);
+	int GetListOfLineContent(std::wstring strLogFilePath, std::vector<std::string> &oListOfLineContent);
 
 	int DivideLineContent(std::string strLineContent, std::vector<std::string> &oListOfValue);
 
@@ -46,6 +46,7 @@ private:
 
 	Syn_LogAnalyzeValue *_pSyn_LogAnalyzeValue;
 
-	std::string _strLogPath;
+	//std::string _strLogPath;
+	std::wstring _strLogPath;
 };
 

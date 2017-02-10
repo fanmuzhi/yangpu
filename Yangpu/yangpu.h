@@ -45,7 +45,7 @@ public:
 	Yangpu(QWidget *parent = 0);
 	~Yangpu();
 
-	void GetLogInfo(vector<string> listOfLogFilePath);
+	void GetLogInfo(vector<wstring> listOfLogFilePath);
 
 public Q_SLOTS:
 

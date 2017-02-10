@@ -108,17 +108,19 @@ void Yangpu::OpenFile()
 	if (urls.isEmpty())
 		return;
 
-	std::vector<std::string> listOfCSVFile;
+	std::vector<std::wstring> listOfCSVFile;
 	for (QList<QUrl>::iterator i = urls.begin(); i != urls.end(); i++)
 	{
 		QString fileName = i->toLocalFile();
 
 		if (fileName.isEmpty())
 			continue;
-		if (!fileName.endsWith(".csv"))
+
+		QString smallfilename = fileName.toLower();
+		if (!smallfilename.endsWith(".csv"))
 			continue;
 
-		listOfCSVFile.push_back(fileName.toStdString());
+		listOfCSVFile.push_back(fileName.toStdWString());
 	}
 
 	GetLogInfo(listOfCSVFile);
@@ -143,23 +145,24 @@ void Yangpu::dropEvent(QDropEvent * event)
 	if (!fileName.endsWith(".csv"))
 		return;*/
 
-	vector<string> listOfCSVFile;
+	vector<wstring> listOfCSVFile;
 	for (QList<QUrl>::iterator i = urls.begin(); i != urls.end(); i++)
 	{
 		QString fileName = i->toLocalFile();
 		
 		if (fileName.isEmpty())
 			continue;
-		if (!fileName.endsWith(".csv"))
+		QString smallfilename = fileName.toLower();
+		if (!smallfilename.endsWith(".csv"))
 			continue;
 
-		listOfCSVFile.push_back(fileName.toStdString());
+		listOfCSVFile.push_back(fileName.toStdWString());
 	}
 
 	GetLogInfo(listOfCSVFile);
 }
 
-void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
+void Yangpu::GetLogInfo(vector<wstring> listOfLogFilePath)
 {
 	unsigned int ListCounts = listOfLogFilePath.size();
 	if (0 == ListCounts)
@@ -170,7 +173,8 @@ void Yangpu::GetLogInfo(vector<string> listOfLogFilePath)
 		for (size_t i = 0; i < _ListOfLogAnalyze.size(); i++)
 		{
 			bool IsExists(false);
-			string sLogFilePath = _ListOfLogAnalyze[i]->GetLogFilePath();
+			//string sLogFilePath = _ListOfLogAnalyze[i]->GetLogFilePath();
+			wstring sLogFilePath = _ListOfLogAnalyze[i]->GetLogFilePath();
 			for (size_t j = 0; j < listOfLogFilePath.size(); j++)
 			{
 				if (sLogFilePath == listOfLogFilePath[j])

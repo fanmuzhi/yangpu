@@ -6,7 +6,7 @@
 
 Syn_LogAnalyze::Syn_LogAnalyze()
 :_pSyn_LogAnalyzeValue(nullptr)
-, _strLogPath("")
+, _strLogPath(L"")
 {
 }
 
@@ -19,15 +19,15 @@ Syn_LogAnalyze::~Syn_LogAnalyze()
 	}
 }
 
-int Syn_LogAnalyze::LogAnalysis(std::string strLogFilePath)
+int Syn_LogAnalyze::LogAnalysis(std::wstring strLogFilePath)
 {
 	int rc(0);
 
 	unsigned Counts = strLogFilePath.size();
 	if (0 == Counts)
 		return Syn_LogExceptionCode::Syn_FileNotExists;
-	if (".csv" != strLogFilePath.substr(Counts - 4, 4))
-		return Syn_LogExceptionCode::Syn_SubstandardFormat;
+	/*if (".csv" != strLogFilePath.substr(Counts - 4, 4))
+		return Syn_LogExceptionCode::Syn_SubstandardFormat;*/
 
 	std::vector<std::string> listOfLineContent;
 	rc = GetListOfLineContent(strLogFilePath, listOfLineContent);
@@ -51,12 +51,13 @@ int Syn_LogAnalyze::GetLogContent(Syn_LogAnalyzeValue * &oLogAnalyzeValue)
 	return Syn_OK;
 }
 
-std::string Syn_LogAnalyze::GetLogFilePath()
+std::wstring Syn_LogAnalyze::GetLogFilePath()
 {
 	return _strLogPath;
 }
 
-int Syn_LogAnalyze::GetListOfLineContent(std::string strLogFilePath, std::vector<std::string> &oListOfLineContent)
+//int Syn_LogAnalyze::GetListOfLineContent(std::string strLogFilePath, std::vector<std::string> &oListOfLineContent)
+int Syn_LogAnalyze::GetListOfLineContent(std::wstring strLogFilePath, std::vector<std::string> &oListOfLineContent)
 {
 	oListOfLineContent.clear();
 
@@ -146,7 +147,10 @@ int Syn_LogAnalyze::AnalyzeAndFill(std::vector<std::string> &ioListOfLineContent
 		else if ("Config file" == strTagValue)
 		{
 			if (currentLineSize >= 2)
+			{
 				_pSyn_LogAnalyzeValue->ConfigFilePath = listOfValue[1];
+
+			}
 		}
 		else if ("Test Time" == strTagValue)
 		{
@@ -691,6 +695,7 @@ void Syn_LogAnalyze::InitLogAnalyzeValue()
 	_pSyn_LogAnalyzeValue->SharpnessTestResult.bExcuted = false;
 	_pSyn_LogAnalyzeValue->RxStandardDevTestResult.bExcuted = false;
 	_pSyn_LogAnalyzeValue->ImperfectionsTestResult.bExcuted = false;
+	_pSyn_LogAnalyzeValue->DeepSleepTestResult.bExcuted = false;
 	_pSyn_LogAnalyzeValue->NoFingerResult.bExcuted = false;
 	_pSyn_LogAnalyzeValue->FakeFingerResult.bExcuted = false;
 }

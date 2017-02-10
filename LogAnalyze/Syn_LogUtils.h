@@ -219,12 +219,12 @@ typedef struct
 
 struct Syn_LogAnalyzeValue
 {
-	unsigned SiteNumber;
-	std::string DeviceSerialNumber;
-	std::string SW_Version;
-	std::string ConfigFilePath;
-	std::string TestDate;
-	std::string SensorSerialNumber;
+	unsigned		SiteNumber;
+	std::string		DeviceSerialNumber;
+	std::string		SW_Version;
+	std::string		ConfigFilePath;
+	std::string		TestDate;
+	std::string		SensorSerialNumber;
 
 	Syn_InitlizationResult			InitlizationResult;
 	Syn_RAMTestResult				RAMTestResult;
